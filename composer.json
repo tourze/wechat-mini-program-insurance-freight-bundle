@@ -1,0 +1,21 @@
+{
+    "name": "tourze/wechat-mini-program-insurance-freight-bundle",
+    "description": "运费险模块",
+    "type": "symfony-bundle",
+    "require": {
+        "php": "^8.1",
+        "tourze/enum-extra": "~0.0.5",
+        "tourze/easy-admin-attribute": "0.1.*",
+        "tourze/doctrine-indexed-bundle": "0.0.*",
+        "tourze/symfony-lock-command-bundle": "0.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "WechatMiniProgramInsuranceFreightBundle\\": "src"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^2.1"
+    }
+}

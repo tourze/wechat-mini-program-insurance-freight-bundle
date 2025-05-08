@@ -4,7 +4,6 @@ namespace WechatMiniProgramInsuranceFreightBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use DoctrineEnhanceBundle\Repository\CommonRepositoryAware;
 use WechatMiniProgramInsuranceFreightBundle\Entity\ReturnOrder;
 
 /**
@@ -15,7 +14,6 @@ use WechatMiniProgramInsuranceFreightBundle\Entity\ReturnOrder;
  */
 class ReturnOrderRepository extends ServiceEntityRepository
 {
-    use CommonRepositoryAware;
 
     public function __construct(ManagerRegistry $registry)
     {

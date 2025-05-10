@@ -16,8 +16,10 @@
     "symfony/console": "^6.4",
     "symfony/dependency-injection": "^6.4",
     "symfony/event-dispatcher": "^6.4",
+    "symfony/framework-bundle": "^6.4",
     "symfony/http-kernel": "^6.4",
     "symfony/messenger": "^6.4",
+    "symfony/yaml": "^6.4 || ^7.1",
     "tourze/arrayable": "0.0.*",
     "tourze/bundle-dependency": "0.0.*",
     "tourze/doctrine-indexed-bundle": "0.0.*",
@@ -42,6 +44,11 @@
   "autoload": {
     "psr-4": {
       "WechatMiniProgramInsuranceFreightBundle\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WechatMiniProgramInsuranceFreightBundle\\Tests\\": "tests"
     }
   }
 }

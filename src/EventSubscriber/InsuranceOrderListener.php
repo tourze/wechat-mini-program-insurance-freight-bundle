@@ -7,7 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Psr\Log\LoggerInterface;
 use Tourze\JsonRPC\Core\Exception\ApiException;
-use WechatMiniProgramAuthBundle\Repository\UserRepository;
+use Tourze\WechatMiniProgramUserContracts\UserLoaderInterface;
 use WechatMiniProgramBundle\Service\Client;
 use WechatMiniProgramInsuranceFreightBundle\Entity\InsuranceOrder;
 use WechatMiniProgramInsuranceFreightBundle\Enum\InsuranceOrderStatus;
@@ -21,7 +21,7 @@ class InsuranceOrderListener
 {
     public function __construct(
         private readonly Client $client,
-        private readonly UserRepository $userRepository,
+        private readonly UserLoaderInterface $userLoader,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -69,7 +69,7 @@ class InsuranceOrderListener
             throw new ApiException('收货详细地址不能为空');
         }
 
-        $user = $this->userRepository->findOneBy(['openId' => $obj->getOpenId()]);
+        $user = $this->userLoader->loadUserByOpenId($obj->getOpenId());
         if (!$user) {
             throw new ApiException('找不到小程序用户');
         }

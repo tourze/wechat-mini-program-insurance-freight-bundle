@@ -49,7 +49,7 @@ class Goods implements PlainArrayInterface
 
     public static function fromArray(array $item): static
     {
-        $obj = new static();
+        $obj = new self();
         $obj->setName($item['name']);
         $obj->setUrl($item['url']);
 

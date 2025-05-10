@@ -79,7 +79,7 @@ class Place implements PlainArrayInterface
 
     public static function fromArray(array $item): self
     {
-        $obj = new static();
+        $obj = new self();
         $obj->setProvince(ArrayHelper::getValue($item, 'province'));
         $obj->setCity(ArrayHelper::getValue($item, 'city'));
         $obj->setCounty(ArrayHelper::getValue($item, 'county'));

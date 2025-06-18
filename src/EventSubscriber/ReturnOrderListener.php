@@ -42,7 +42,7 @@ class ReturnOrderListener
         $request->setGoodsList($obj->getGoodsList());
 
         $result = $this->client->request($request);
-        if (isset($result['return_id'])) {
+        if ((bool) isset($result['return_id'])) {
             // 保存这个退货ID
             $obj->setReturnId($result['return_id']);
         } else {

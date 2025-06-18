@@ -52,7 +52,7 @@ class SyncInsuranceOrderListCommand extends LockableCommand
                 $request->setOffset($offset);
                 $response = $this->client->request($request);
 
-                if (empty($response['list'])) {
+                if ((bool) empty($response['list'])) {
                     break;
                 }
                 foreach ($response['list'] as $item) {

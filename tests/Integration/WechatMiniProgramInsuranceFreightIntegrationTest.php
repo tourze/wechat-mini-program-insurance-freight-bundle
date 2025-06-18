@@ -85,13 +85,13 @@ class WechatMiniProgramInsuranceFreightIntegrationTest extends KernelTestCase
         $insuranceOrder->setOpenId('test_openid');
         $insuranceOrder->setOrderNo('test_order_no_' . time());
         $insuranceOrder->setStatus(InsuranceOrderStatus::Securing);
-        $insuranceOrder->setPayTime(new \DateTime());
+        $insuranceOrder->setPayTime(new \DateTimeImmutable());
         $insuranceOrder->setPayAmount(1000);
         $insuranceOrder->setEstimateAmount(2000);
         $insuranceOrder->setPremium(100);
         $insuranceOrder->setDeliveryNo('SF1234567890');
         $insuranceOrder->setPolicyNo('P202112345678');
-        $insuranceOrder->setInsuranceEndDate(new \DateTime('+1 month'));
+        $insuranceOrder->setInsuranceEndDate(new \DateTimeImmutable('+1 month'));
         $insuranceOrder->setDeliveryPlaceProvince('广东省');
         $insuranceOrder->setDeliveryPlaceCity('深圳市');
         $insuranceOrder->setDeliveryPlaceCounty('南山区');

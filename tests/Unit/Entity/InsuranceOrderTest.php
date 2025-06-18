@@ -40,7 +40,7 @@ class InsuranceOrderTest extends TestCase
     
     public function testPayTime_withValidDateTime(): void
     {
-        $payTime = new \DateTime('2023-01-01 12:00:00');
+        $payTime = new \DateTimeImmutable('2023-01-01 12:00:00');
         $this->insuranceOrder->setPayTime($payTime);
         $this->assertSame($payTime, $this->insuranceOrder->getPayTime());
     }
@@ -118,7 +118,7 @@ class InsuranceOrderTest extends TestCase
     
     public function testInsuranceEndDate_withValidDateTime(): void
     {
-        $endDate = new \DateTime('2023-12-31 23:59:59');
+        $endDate = new \DateTimeImmutable('2023-12-31 23:59:59');
         $this->insuranceOrder->setInsuranceEndDate($endDate);
         $this->assertSame($endDate, $this->insuranceOrder->getInsuranceEndDate());
     }
@@ -164,7 +164,7 @@ class InsuranceOrderTest extends TestCase
     
     public function testPayFinishTime_withValidDateTime(): void
     {
-        $payFinishTime = new \DateTime('2023-02-01 15:30:00');
+        $payFinishTime = new \DateTimeImmutable('2023-02-01 15:30:00');
         $this->insuranceOrder->setPayFinishTime($payFinishTime);
         $this->assertSame($payFinishTime, $this->insuranceOrder->getPayFinishTime());
     }
@@ -247,14 +247,14 @@ class InsuranceOrderTest extends TestCase
     
     public function testCreateTime_withValidDateTime(): void
     {
-        $createTime = new \DateTime('2023-01-01 10:00:00');
+        $createTime = new \DateTimeImmutable('2023-01-01 10:00:00');
         $this->insuranceOrder->setCreateTime($createTime);
         $this->assertSame($createTime, $this->insuranceOrder->getCreateTime());
     }
     
     public function testUpdateTime_withValidDateTime(): void
     {
-        $updateTime = new \DateTime('2023-01-02 11:00:00');
+        $updateTime = new \DateTimeImmutable('2023-01-02 11:00:00');
         $this->insuranceOrder->setUpdateTime($updateTime);
         $this->assertSame($updateTime, $this->insuranceOrder->getUpdateTime());
     }
@@ -265,13 +265,13 @@ class InsuranceOrderTest extends TestCase
         $openId = 'o1234567890abcdef';
         $orderNo = '2021123456789';
         $status = InsuranceOrderStatus::Securing;
-        $payTime = new \DateTime('2023-01-01 12:00:00');
+        $payTime = new \DateTimeImmutable('2023-01-01 12:00:00');
         $payAmount = 1000;
         $estimateAmount = 2000;
         $premium = 100;
         $deliveryNo = 'SF1234567890';
         $policyNo = 'P202112345678';
-        $insuranceEndDate = new \DateTime('2023-12-31 23:59:59');
+        $insuranceEndDate = new \DateTimeImmutable('2023-12-31 23:59:59');
         
         // 初始化所有必要属性
         $this->insuranceOrder->setOpenId($openId);
@@ -312,13 +312,13 @@ class InsuranceOrderTest extends TestCase
         $openId = 'o1234567890abcdef';
         $orderNo = '2021123456789';
         $status = InsuranceOrderStatus::Securing;
-        $payTime = new \DateTime('2023-01-01 12:00:00');
+        $payTime = new \DateTimeImmutable('2023-01-01 12:00:00');
         $payAmount = 1000;
         $estimateAmount = 2000;
         $premium = 100;
         $deliveryNo = 'SF1234567890';
         $policyNo = 'P202112345678';
-        $insuranceEndDate = new \DateTime('2023-12-31 23:59:59');
+        $insuranceEndDate = new \DateTimeImmutable('2023-12-31 23:59:59');
         
         // 初始化所有必要属性
         $this->insuranceOrder->setOpenId($openId);

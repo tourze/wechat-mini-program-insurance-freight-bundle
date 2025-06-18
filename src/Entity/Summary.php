@@ -4,19 +4,16 @@ namespace WechatMiniProgramInsuranceFreightBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramInsuranceFreightBundle\Repository\SummaryRepository;
 
 #[ORM\Entity(repositoryClass: SummaryRepository::class)]
 #[ORM\Table(name: 'wechat_insurance_summary', options: ['comment' => '定时统计'])]
 #[ORM\UniqueConstraint(name: 'wechat_insurance_summary_idx_uniq', columns: ['account_id', 'date'])]
-class Summary
+class Summary implements Stringable
 {
-    #[ListColumn(order: -1)]
-    #[ExportColumn]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
@@ -31,7 +28,7 @@ class Summary
     #[ORM\ManyToOne]
     private ?Account $account = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['comment' => '日期'])]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '日期'])]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(nullable: true, options: ['comment' => '投保总数'])]
@@ -43,21 +40,12 @@ class Summary
     #[ORM\Column(nullable: true, options: ['comment' => '理赔成功数'])]
     private ?int $claimSuccessNum = null;
 
-    /**
-     * @var int|null 单位：分
-     */
     #[ORM\Column(nullable: true, options: ['comment' => '当前保费'])]
     private ?int $premium = null;
 
-    /**
-     * @var int|null 单位: 分
-     */
     #[ORM\Column(nullable: true, options: ['comment' => '当前账号余额'])]
     private ?int $funds = null;
 
-    /**
-     * @var bool|null 系统安全原因不能投保
-     */
     #[ORM\Column(nullable: true, options: ['comment' => '是否不能投保'])]
     private ?bool $needClose = null;
 
@@ -155,5 +143,10 @@ class Summary
         $this->needClose = $needClose;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->id;
     }
 }

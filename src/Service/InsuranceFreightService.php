@@ -63,7 +63,7 @@ class InsuranceFreightService
         $request->setOrderNo($order->getOrderNo());
         $response = $this->client->request($request);
 
-        if (empty($response['list'])) {
+        if ((bool) empty($response['list'])) {
             return;
         }
         $item = $response['list'][0];

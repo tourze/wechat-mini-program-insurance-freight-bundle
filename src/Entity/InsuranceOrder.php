@@ -6,18 +6,13 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Tourze\Arrayable\AdminArrayInterface;
 use Tourze\Arrayable\ApiArrayInterface;
-use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use Tourze\EasyAdmin\Attribute\Action\Listable;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
-use Tourze\EasyAdmin\Attribute\Permission\AsPermission;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramInsuranceFreightBundle\Enum\InsuranceOrderStatus;
 use WechatMiniProgramInsuranceFreightBundle\Repository\InsuranceOrderRepository;
 
-#[AsPermission(title: '运费险订单')]
 #[Listable]
 #[ORM\Entity(repositoryClass: InsuranceOrderRepository::class)]
 #[ORM\Table(name: 'wechat_mini_program_insurance_freight_order', options: ['comment' => '运费险订单'])]
@@ -25,111 +20,62 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
 {
     use TimestampableAware;
 
-    #[ExportColumn]
-    #[ListColumn(order: -1, sorter: true)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
     private ?string $id = null;
 
-    #[ListColumn(title: '小程序')]
     #[ORM\ManyToOne]
     private ?Account $account = null;
 
-    #[ListColumn]
-    #[IndexColumn]
     #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '买家openid'])]
     private string $openId;
 
-    #[ListColumn]
-    #[IndexColumn]
     #[ORM\Column(type: Types::STRING, length: 80, unique: true, options: ['comment' => '微信支付单号'])]
     private string $orderNo;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::INTEGER, length: 20, nullable: true, enumType: InsuranceOrderStatus::class, options: ['comment' => '状态'])]
     private InsuranceOrderStatus $status;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false, options: ['comment' => '微信支付时间'])]
     private \DateTimeInterface $payTime;
 
-    #[ListColumn(sorter: true)]
-    #[ORM\Column(type: Types::INTEGER, options: ['comment' => '微信支付金额 单位：分'])]
     private int $payAmount;
 
-    #[ListColumn(sorter: true)]
-    #[ORM\Column(type: Types::INTEGER, options: ['comment' => '预估理赔金额 单位：分'])]
     private int $estimateAmount;
 
-    #[ListColumn(sorter: true)]
-    #[ORM\Column(type: Types::INTEGER, options: ['comment' => '保费 单位：分'])]
     private int $premium;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '发货运单号'])]
     private string $deliveryNo;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '发货地址 省'])]
     private string $deliveryPlaceProvince;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '发货地址 市'])]
     private string $deliveryPlaceCity;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '发货地址 区'])]
     private string $deliveryPlaceCounty;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '发货地址 详细地址'])]
     private string $deliveryPlaceAddress;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '收货地址 省'])]
     private string $receiptPlaceProvince;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '收货地址 市'])]
     private string $receiptPlaceCity;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '收货地址 区'])]
     private string $receiptPlaceCounty;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '收货地址 详细地址'])]
     private string $receiptPlaceAddress;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '保单号'])]
     private string $policyNo;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false, options: ['comment' => '保险止期'])]
     private \DateTimeInterface $insuranceEndDate;
 
-    #[ListColumn]
-    #[IndexColumn]
     #[ORM\Column(type: Types::STRING, length: 80, nullable: true, options: ['comment' => '退款运单号'])]
     private ?string $refundDeliveryNo = null;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, nullable: true, options: ['comment' => '退款快递公司'])]
     private ?string $refundCompany = null;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => '理赔打款失败原因'])]
     private ?string $payFailReason = null;
 
-    #[ListColumn]
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['comment' => '理赔款打给用户的时间'])]
     private ?\DateTimeInterface $payFinishTime = null;
 
-    #[ListColumn]
-    #[ORM\Column(nullable: true, options: ['comment' => '是否上门取件'])]
     private ?bool $homePickUp = null;
 
     #[ORM\Column(length: 200, nullable: true, options: ['comment' => '投保订单在商家小程序的path'])]
@@ -138,8 +84,6 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
     #[ORM\Column(nullable: true, options: ['comment' => '投保订单商品列表'])]
     private ?array $goodsList = null;
 
-    #[ListColumn]
-    #[IndexColumn]
     #[ORM\Column(type: Types::STRING, length: 80, nullable: true, options: ['comment' => '理赔报案号'])]
     private ?string $reportNo = null;
 

@@ -8,8 +8,6 @@ use Tourze\Arrayable\ApiArrayInterface;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
-use Tourze\EasyAdmin\Attribute\Column\ExportColumn;
-use Tourze\EasyAdmin\Attribute\Column\ListColumn;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnOrderStatus;
 use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnStatus;
@@ -21,8 +19,6 @@ class ReturnOrder implements ApiArrayInterface
 {
     use TimestampableAware;
 
-    #[ExportColumn]
-    #[ListColumn(order: -1, sorter: true)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
@@ -44,15 +40,9 @@ class ReturnOrder implements ApiArrayInterface
     #[ORM\Column(length: 64, options: ['comment' => '退货用户的openid'])]
     private ?string $openId = null;
 
-    /**
-     * @var string|null 如投保时已传入订单商品信息，则以投保时传入的为准
-     */
     #[ORM\Column(length: 255, nullable: true, options: ['comment' => '退货订单在商家小程序的path'])]
     private ?string $orderPath = null;
 
-    /**
-     * @var array|null 一个元素为对象的数组,结构如下↓ 如投保时已传入订单商品信息，则以投保时传入的为准
-     */
     #[ORM\Column(nullable: true, options: ['comment' => '退货商品list'])]
     private ?array $goodsList = null;
 
@@ -78,7 +68,6 @@ class ReturnOrder implements ApiArrayInterface
     private ?string $returnId = null;
 
     #[IndexColumn]
-    #[ORM\Column(type: Types::STRING, length: 80, nullable: true, options: ['comment' => '理赔报案号'])]
     private ?string $reportNo = null;
 
     public function getId(): ?string

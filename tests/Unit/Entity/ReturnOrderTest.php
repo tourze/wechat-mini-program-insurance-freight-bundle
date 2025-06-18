@@ -105,14 +105,14 @@ class ReturnOrderTest extends TestCase
     
     public function testCreateTime_withValidDateTime(): void
     {
-        $createTime = new \DateTime('2023-01-01 10:00:00');
+        $createTime = new \DateTimeImmutable('2023-01-01 10:00:00');
         $this->returnOrder->setCreateTime($createTime);
         $this->assertSame($createTime, $this->returnOrder->getCreateTime());
     }
     
     public function testUpdateTime_withValidDateTime(): void
     {
-        $updateTime = new \DateTime('2023-01-02 11:00:00');
+        $updateTime = new \DateTimeImmutable('2023-01-02 11:00:00');
         $this->returnOrder->setUpdateTime($updateTime);
         $this->assertSame($updateTime, $this->returnOrder->getUpdateTime());
     }

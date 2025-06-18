@@ -14,7 +14,9 @@ use Yiisoft\Json\Json;
 #[AsCommand(name: 'wechat-insurance:query-open', description: '查询开通状态')]
 class QueryOpenCommand extends Command
 {
-    public function __construct(
+    
+    public const NAME = 'wechat-insurance:query-open';
+public function __construct(
         private readonly AccountRepository $accountRepository,
         private readonly Client $client,
     ) {

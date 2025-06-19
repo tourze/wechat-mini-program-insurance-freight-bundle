@@ -11,7 +11,7 @@ use WechatMiniProgramBundle\Service\Client;
 use WechatMiniProgramInsuranceFreightBundle\Request\QueryOpenRequest;
 use Yiisoft\Json\Json;
 
-#[AsCommand(name: 'wechat-insurance:query-open', description: '查询开通状态')]
+#[AsCommand(name: self::NAME, description: '查询开通状态')]
 class QueryOpenCommand extends Command
 {
     

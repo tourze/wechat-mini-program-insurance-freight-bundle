@@ -2,7 +2,7 @@
 
 namespace WechatMiniProgramInsuranceFreightBundle\Command;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -17,7 +17,7 @@ use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnOrderStatus;
 use WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository;
 
 #[AsCronTask('*/15 * * * *')]
-#[AsCommand(name: SyncValidReturnOrdersCommand::NAME, description: '同步所有有效的退货单信息到本地')]
+#[AsCommand(name: self::NAME, description: '同步所有有效的退货单信息到本地')]
 class SyncValidReturnOrdersCommand extends LockableCommand
 {
     public const NAME = 'wechat-insurance:sync-valid-return-orders';
@@ -37,7 +37,7 @@ class SyncValidReturnOrdersCommand extends LockableCommand
             ->setParameter('statusList', [
                 ReturnOrderStatus::Cancelled,
             ])
-            ->setParameter('minTime', Carbon::now()->subDays($_ENV['WECHAT_INSURANCE_SYNC_RETURN_ORDER_DAY_NUM'] ?? 15))
+            ->setParameter('minTime', CarbonImmutable::now()->subDays($_ENV['WECHAT_INSURANCE_SYNC_RETURN_ORDER_DAY_NUM'] ?? 15))
             ->getQuery()
             ->toIterable();
 

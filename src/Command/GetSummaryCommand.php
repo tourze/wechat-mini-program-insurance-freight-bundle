@@ -2,7 +2,7 @@
 
 namespace WechatMiniProgramInsuranceFreightBundle\Command;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -18,9 +18,11 @@ use WechatMiniProgramInsuranceFreightBundle\Repository\SummaryRepository;
 use WechatMiniProgramInsuranceFreightBundle\Request\GetSummaryRequest;
 
 #[AsCronTask('30 */6 * * *')]
-#[AsCommand(name: 'wechat-insurance:get-summary', description: '拉取摘要接口')]
+#[AsCommand(name: self::NAME, description: '拉取摘要接口')]
 class GetSummaryCommand extends LockableCommand
 {
+    public const NAME = 'wechat-insurance:get-summary';
+
     public function __construct(
         private readonly AccountRepository $accountRepository,
         private readonly Client $client,
@@ -32,11 +34,12 @@ class GetSummaryCommand extends LockableCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $endTime = Carbon::today()->endOfDay();
+        $endTime = CarbonImmutable::today()->endOfDay();
         $startTime = $endTime->subDays(3);
         $dateList = CarbonPeriod::between($startTime, $endTime);
 
         foreach ($this->accountRepository->findBy(['valid' => true]) as $account) {
+            /** @var \Carbon\CarbonImmutable $date */
             foreach ($dateList as $date) {
                 $request = new GetSummaryRequest();
                 $request->setAccount($account);
@@ -48,7 +51,7 @@ class GetSummaryCommand extends LockableCommand
                     'account' => $account,
                     'date' => $date->startOfDay(),
                 ]);
-                if (!$summary) {
+                if ($summary === null) {
                     $summary = new Summary();
                     $summary->setAccount($account);
                     $summary->setDate($date->startOfDay());

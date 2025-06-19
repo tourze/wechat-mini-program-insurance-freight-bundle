@@ -18,7 +18,7 @@ use WechatMiniProgramInsuranceFreightBundle\Request\GetInsuranceOrderListRequest
 use WechatMiniProgramInsuranceFreightBundle\Service\InsuranceFreightService;
 
 #[AsCronTask('*/15 * * * *')]
-#[AsCommand(name: SyncInsuranceOrderListCommand::NAME, description: '拉取保单信息到本地')]
+#[AsCommand(name: self::NAME, description: '拉取保单信息到本地')]
 class SyncInsuranceOrderListCommand extends LockableCommand
 {
     public const NAME = 'wechat-insurance:sync-insurance-order-list';
@@ -59,7 +59,7 @@ class SyncInsuranceOrderListCommand extends LockableCommand
                     $order = $this->orderRepository->findOneBy([
                         'policyNo' => $item['policy_no'],
                     ]);
-                    if (!$order) {
+                    if ($order === null) {
                         $order = new InsuranceOrder();
                         $order->setAccount($account);
                         $order->setPolicyNo($item['policy_no']);

@@ -8,16 +8,14 @@ use Tourze\Arrayable\AdminArrayInterface;
 use Tourze\Arrayable\ApiArrayInterface;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
-use Tourze\EasyAdmin\Attribute\Action\Listable;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramInsuranceFreightBundle\Enum\InsuranceOrderStatus;
 use WechatMiniProgramInsuranceFreightBundle\Repository\InsuranceOrderRepository;
 
-#[Listable]
 #[ORM\Entity(repositoryClass: InsuranceOrderRepository::class)]
 #[ORM\Table(name: 'wechat_mini_program_insurance_freight_order', options: ['comment' => '运费险订单'])]
 class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
-{
+, \Stringable{
     use TimestampableAware;
 
     #[ORM\Id]
@@ -420,5 +418,10 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
             'homePickUp' => $this->isHomePickUp(),
             'orderPath' => $this->getOrderPath(),
         ];
+    }
+
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

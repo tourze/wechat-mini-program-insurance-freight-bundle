@@ -2,7 +2,7 @@
 
 namespace WechatMiniProgramInsuranceFreightBundle\Service;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use WechatMiniProgramBundle\Service\Client;
@@ -11,8 +11,6 @@ use WechatMiniProgramInsuranceFreightBundle\Entity\ReturnOrder;
 use WechatMiniProgramInsuranceFreightBundle\Enum\InsuranceOrderStatus;
 use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnOrderStatus;
 use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnStatus;
-use WechatMiniProgramInsuranceFreightBundle\Repository\InsuranceOrderRepository;
-use WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository;
 use WechatMiniProgramInsuranceFreightBundle\Request\GetInsuranceOrderListRequest;
 use WechatMiniProgramInsuranceFreightBundle\Request\GetReturnOrderRequest;
 
@@ -25,8 +23,6 @@ class InsuranceFreightService
 {
     public function __construct(
         private readonly Client $client,
-        private readonly InsuranceOrderRepository $orderRepository,
-        private readonly ReturnOrderRepository $returnOrderRepository,
         private readonly LoggerInterface $logger,
         private readonly EntityManagerInterface $entityManager,
     ) {
@@ -44,7 +40,7 @@ class InsuranceFreightService
         $order->setStatus(InsuranceOrderStatus::from($item['status']));
         $order->setPayFailReason($item['pay_fail_reason'] ?? null);
         $order->setPayFinishTime(isset($item['pay_finish_time']) && $item['pay_finish_time'] > 0
-            ? Carbon::createFromTimestamp($item['pay_finish_time'], date_default_timezone_get())
+            ? CarbonImmutable::createFromTimestamp($item['pay_finish_time'], date_default_timezone_get())
             : null);
         $order->setHomePickUp((bool) $item['is_home_pick_up']);
     }
@@ -63,7 +59,7 @@ class InsuranceFreightService
         $request->setOrderNo($order->getOrderNo());
         $response = $this->client->request($request);
 
-        if ((bool) empty($response['list'])) {
+        if (empty($response['list'])) {
             return;
         }
         $item = $response['list'][0];

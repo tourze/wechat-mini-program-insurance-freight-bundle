@@ -4,7 +4,6 @@ namespace WechatMiniProgramInsuranceFreightBundle\Tests\Integration;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
-use PHPUnit\Framework\SkippedWithMessageException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramBundle\Service\Client;
@@ -27,22 +26,8 @@ class WechatMiniProgramInsuranceFreightIntegrationTest extends KernelTestCase
     {
         // 暂时跳过集成测试，等待环境配置完善
         $this->markTestSkipped('集成测试需要完整的环境配置，暂时跳过。');
-        
-        // 检查依赖
-        $this->checkDependencies();
-
-        // 启动内核
-        self::bootKernel();
     }
 
-    /**
-     * 检查测试所需的依赖
-     * 
-     * @throws SkippedWithMessageException 如果依赖缺失则抛出此异常
-     */
-    private function checkDependencies(): void
-    {
-    }
 
     /**
      * 测试服务是否正确注册到容器中
@@ -72,7 +57,7 @@ class WechatMiniProgramInsuranceFreightIntegrationTest extends KernelTestCase
         // 获取容器和实体管理器
         $container = static::getContainer();
         $entityManager = $container->get('doctrine.orm.entity_manager');
-        assert($entityManager instanceof EntityManagerInterface);
+        $this->assertInstanceOf(EntityManagerInterface::class, $entityManager);
         
         // 创建数据库架构
         $schemaTool = new SchemaTool($entityManager);
@@ -154,14 +139,10 @@ class WechatMiniProgramInsuranceFreightIntegrationTest extends KernelTestCase
         
         // 手动创建服务，注入模拟的Client
         $entityManager = $container->get('doctrine.orm.entity_manager');
-        $insuranceOrderRepository = $container->get(InsuranceOrderRepository::class);
-        $returnOrderRepository = $container->get('WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository');
         $logger = $container->get('logger');
         
         $service = new InsuranceFreightService(
             $mockClient,
-            $insuranceOrderRepository,
-            $returnOrderRepository,
             $logger,
             $entityManager
         );

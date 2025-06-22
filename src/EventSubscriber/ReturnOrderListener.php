@@ -27,22 +27,28 @@ class ReturnOrderListener
     public function prePersist(ReturnOrder $obj): void
     {
         $user = $this->userLoader->loadUserByOpenId($obj->getOpenId());
-        if (!$user) {
+        if ($user === null) {
             throw new ApiException('找不到小程序用户');
+        }
+        
+        // 检查用户实例是否有 getAccount 方法
+        if (!method_exists($user, 'getAccount')) {
+            throw new ApiException('用户实例缺少 getAccount 方法');
         }
 
         $request = new CreateReturnOrderRequest();
+        /** @var \WechatMiniProgramAuthBundle\Entity\User $user */
         $request->setAccount($user->getAccount());
         $request->setShopOrderId($obj->getShopOrderId());
         $request->setBizAddress(Address::fromArray($obj->getBizAddress()));
         $request->setUserAddress(Address::fromArray($obj->getUserAddress()));
-        $request->setOpenid($obj->getOpenId());
+        $request->setOpenId($obj->getOpenId());
         $request->setOrderPath($obj->getOrderPath());
         $request->setWxPayId($obj->getWxPayId());
         $request->setGoodsList($obj->getGoodsList());
 
         $result = $this->client->request($request);
-        if ((bool) isset($result['return_id'])) {
+        if (isset($result['return_id'])) {
             // 保存这个退货ID
             $obj->setReturnId($result['return_id']);
         } else {
@@ -54,7 +60,7 @@ class ReturnOrderListener
 
     public function postRemove(ReturnOrder $obj): void
     {
-        if (!$obj->getReturnId()) {
+        if ($obj->getReturnId() === null || $obj->getReturnId() === '') {
             return;
         }
 

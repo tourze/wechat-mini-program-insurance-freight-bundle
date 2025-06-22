@@ -2,7 +2,7 @@
 
 namespace WechatMiniProgramInsuranceFreightBundle\EventSubscriber;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -38,7 +38,7 @@ class WechatServerCallbackSubscriber
         $Status = $data['upload_event']['Status'];
         $FinishTime = $data['upload_event']['FinishTime'];
         $order = $this->orderRepository->findOneBy(['orderNo' => $OrderNo]);
-        if (!$order) {
+        if ($order === null) {
             $this->logger->error('收到微信运费险回调，但是找不到订单信息', [
                 'data' => $data,
             ]);
@@ -47,7 +47,7 @@ class WechatServerCallbackSubscriber
         }
 
         $order->setStatus(InsuranceOrderStatus::from($Status));
-        $order->setPayFinishTime(Carbon::createFromTimestamp($FinishTime, date_default_timezone_get()));
+        $order->setPayFinishTime(CarbonImmutable::createFromTimestamp($FinishTime, date_default_timezone_get()));
         $this->entityManager->persist($order);
         $this->entityManager->flush();
     }

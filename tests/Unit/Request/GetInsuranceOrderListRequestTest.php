@@ -2,7 +2,7 @@
 
 namespace WechatMiniProgramInsuranceFreightBundle\Tests\Unit\Request;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use PHPUnit\Framework\TestCase;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramInsuranceFreightBundle\Enum\SortDirect;
@@ -49,8 +49,8 @@ class GetInsuranceOrderListRequestTest extends TestCase
     {
         // 准备测试数据
         $account = $this->createMock(Account::class);
-        $beginTime = Carbon::createFromTimestamp(1625097600); // 2021-07-01 00:00:00
-        $endTime = Carbon::createFromTimestamp(1627689600); // 2021-07-31 00:00:00
+        $beginTime = CarbonImmutable::createFromTimestamp(1625097600); // 2021-07-01 00:00:00
+        $endTime = CarbonImmutable::createFromTimestamp(1627689600); // 2021-07-31 00:00:00
         
         // 设置请求参数
         $this->request->setAccount($account);
@@ -114,12 +114,12 @@ class GetInsuranceOrderListRequestTest extends TestCase
         $this->assertEquals($deliveryNo, $this->request->getDeliveryNo());
         
         // 测试 BeginTime
-        $beginTime = Carbon::createFromTimestamp(1625097600);
+        $beginTime = CarbonImmutable::createFromTimestamp(1625097600);
         $this->request->setBeginTime($beginTime);
         $this->assertSame($beginTime, $this->request->getBeginTime());
         
         // 测试 EndTime
-        $endTime = Carbon::createFromTimestamp(1627689600);
+        $endTime = CarbonImmutable::createFromTimestamp(1627689600);
         $this->request->setEndTime($endTime);
         $this->assertSame($endTime, $this->request->getEndTime());
         

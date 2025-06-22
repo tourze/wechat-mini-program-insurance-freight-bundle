@@ -13,9 +13,10 @@ use WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository;
 use WechatMiniProgramInsuranceFreightBundle\Request\UnbindReturnOrderRequest;
 use Yiisoft\Json\Json;
 
-#[AsCommand(name: 'wechat-insurance:unbind-return-order', description: '解绑单个退货信息')]
+#[AsCommand(name: self::NAME, description: '解绑单个退货信息')]
 class UnbindReturnOrderCommand extends LockableCommand
 {
+    public const NAME = 'wechat-insurance:unbind-return-order';
     public function __construct(
         private readonly ReturnOrderRepository $orderRepository,
         private readonly Client $client,
@@ -32,7 +33,7 @@ class UnbindReturnOrderCommand extends LockableCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $order = $this->orderRepository->find($input->getArgument('shopOrderId'));
-        if (!$order) {
+        if ($order === null) {
             throw new \RuntimeException('找不到退货单');
         }
 

@@ -2,7 +2,7 @@
 
 namespace WechatMiniProgramInsuranceFreightBundle\EventSubscriber;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Psr\Log\LoggerInterface;
@@ -29,54 +29,122 @@ class InsuranceOrderListener
     public function prePersist(InsuranceOrder $obj): void
     {
         // 保存前需要先请求微信创单
-        if (!$obj->getOpenId()) {
+        try {
+            if ($obj->getOpenId() === '') {
+                throw new ApiException('openid不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('openid不能为空');
         }
-        if (!$obj->getDeliveryNo()) {
+        
+        try {
+            if ($obj->getDeliveryNo() === '') {
+                throw new ApiException('发货运单号不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('发货运单号不能为空');
         }
-        if (!$obj->getPayAmount()) {
+        
+        try {
+            if ($obj->getPayAmount() === 0) {
+                throw new ApiException('支付金额不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('支付金额不能为空');
         }
-        if (!$obj->getPayTime()) {
+        
+        try {
+            $obj->getPayTime();
+        } catch (\Error $e) {
             throw new ApiException('支付时间不能为空');
         }
-        if (!$obj->getOrderNo()) {
+        
+        try {
+            if ($obj->getOrderNo() === '') {
+                throw new ApiException('微信支付单号不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('微信支付单号不能为空');
         }
-        if (!$obj->getDeliveryPlaceProvince()) {
+        
+        try {
+            if ($obj->getDeliveryPlaceProvince() === '') {
+                throw new ApiException('发货省份不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('发货省份不能为空');
         }
-        if (!$obj->getDeliveryPlaceCity()) {
+        
+        try {
+            if ($obj->getDeliveryPlaceCity() === '') {
+                throw new ApiException('发货城市不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('发货城市不能为空');
         }
-        if (!$obj->getDeliveryPlaceCounty()) {
+        
+        try {
+            if ($obj->getDeliveryPlaceCounty() === '') {
+                throw new ApiException('发货区不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('发货区不能为空');
         }
-        if (!$obj->getDeliveryPlaceAddress()) {
+        
+        try {
+            if ($obj->getDeliveryPlaceAddress() === '') {
+                throw new ApiException('发货详细地址不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('发货详细地址不能为空');
         }
-        if (!$obj->getReceiptPlaceProvince()) {
+        
+        try {
+            if ($obj->getReceiptPlaceProvince() === '') {
+                throw new ApiException('收货省份不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('收货省份不能为空');
         }
-        if (!$obj->getReceiptPlaceCity()) {
+        
+        try {
+            if ($obj->getReceiptPlaceCity() === '') {
+                throw new ApiException('收货城市不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('收货城市不能为空');
         }
-        if (!$obj->getReceiptPlaceCounty()) {
+        
+        try {
+            if ($obj->getReceiptPlaceCounty() === '') {
+                throw new ApiException('收货区不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('收货区不能为空');
         }
-        if (!$obj->getReceiptPlaceAddress()) {
+        
+        try {
+            if ($obj->getReceiptPlaceAddress() === '') {
+                throw new ApiException('收货详细地址不能为空');
+            }
+        } catch (\Error $e) {
             throw new ApiException('收货详细地址不能为空');
         }
 
         $user = $this->userLoader->loadUserByOpenId($obj->getOpenId());
-        if (!$user) {
+        if ($user === null) {
             throw new ApiException('找不到小程序用户');
+        }
+        
+        // 检查用户实例是否有 getAccount 方法
+        if (!method_exists($user, 'getAccount')) {
+            throw new ApiException('用户实例缺少 getAccount 方法');
         }
 
         $request = new CreateInsuranceOrderRequest();
+        /** @var \WechatMiniProgramAuthBundle\Entity\User $user */
         $request->setAccount($user->getAccount());
-        $request->setOpenid($obj->getOpenId());
+        $request->setOpenId($obj->getOpenId());
         $request->setDeliveryNo($obj->getDeliveryNo());
         $request->setPayAmount($obj->getPayAmount());
         $request->setPayTime($obj->getPayTime()->getTimestamp());
@@ -110,7 +178,7 @@ class InsuranceOrderListener
             return;
         }
         $obj->setPolicyNo($result['policy_no']);
-        $obj->setInsuranceEndDate(Carbon::parse($result['insurance_end_date']));
+        $obj->setInsuranceEndDate(CarbonImmutable::parse($result['insurance_end_date']));
         $obj->setEstimateAmount($result['estimate_amount']);
         $obj->setPremium($result['premium']);
         // 创建成功就是保障中的意思

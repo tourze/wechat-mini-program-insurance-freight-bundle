@@ -13,8 +13,6 @@ use WechatMiniProgramInsuranceFreightBundle\Entity\ReturnOrder;
 use WechatMiniProgramInsuranceFreightBundle\Enum\InsuranceOrderStatus;
 use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnOrderStatus;
 use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnStatus;
-use WechatMiniProgramInsuranceFreightBundle\Repository\InsuranceOrderRepository;
-use WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository;
 use WechatMiniProgramInsuranceFreightBundle\Request\GetInsuranceOrderListRequest;
 use WechatMiniProgramInsuranceFreightBundle\Request\GetReturnOrderRequest;
 use WechatMiniProgramInsuranceFreightBundle\Service\InsuranceFreightService;
@@ -22,8 +20,6 @@ use WechatMiniProgramInsuranceFreightBundle\Service\InsuranceFreightService;
 class InsuranceFreightServiceTest extends TestCase
 {
     private Client|MockObject $client;
-    private InsuranceOrderRepository|MockObject $orderRepository;
-    private ReturnOrderRepository|MockObject $returnOrderRepository;
     private LoggerInterface|MockObject $logger;
     private EntityManagerInterface|MockObject $entityManager;
     private InsuranceFreightService $service;
@@ -33,15 +29,11 @@ class InsuranceFreightServiceTest extends TestCase
         parent::setUp();
 
         $this->client = $this->createMock(Client::class);
-        $this->orderRepository = $this->createMock(InsuranceOrderRepository::class);
-        $this->returnOrderRepository = $this->createMock(ReturnOrderRepository::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->service = new InsuranceFreightService(
             $this->client,
-            $this->orderRepository,
-            $this->returnOrderRepository,
             $this->logger,
             $this->entityManager
         );

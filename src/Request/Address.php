@@ -90,7 +90,7 @@ class Address implements PlainArrayInterface
         $this->address = $address;
     }
 
-    public static function fromArray(array $item): static
+    public static function fromArray(array $item): self
     {
         $obj = new self();
         $obj->setName($item['name']);

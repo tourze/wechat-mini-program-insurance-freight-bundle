@@ -40,7 +40,7 @@ class GetSummaryCommand extends LockableCommand
 
         foreach ($this->accountRepository->findBy(['valid' => true]) as $account) {
             /** @var \Carbon\CarbonImmutable $date */
-            foreach ($dateList as $date) {
+            foreach ($dateList->toArray() as $date) {
                 $request = new GetSummaryRequest();
                 $request->setAccount($account);
                 $request->setBeginTime($date->clone()->startOfDay());

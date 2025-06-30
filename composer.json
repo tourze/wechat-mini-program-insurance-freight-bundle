@@ -25,6 +25,7 @@
     "tourze/async-command-bundle": "0.0.*",
     "tourze/bundle-dependency": "0.0.*",
     "tourze/doctrine-indexed-bundle": "0.0.*",
+    "tourze/doctrine-resolve-target-entity-bundle": "0.0.*",
     "tourze/doctrine-snowflake-bundle": "0.1.*",
     "tourze/doctrine-timestamp-bundle": "0.0.*",
     "tourze/enum-extra": "0.1.*",

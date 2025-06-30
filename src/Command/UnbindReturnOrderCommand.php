@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tourze\LockCommandBundle\Command\LockableCommand;
 use WechatMiniProgramBundle\Service\Client;
+use WechatMiniProgramInsuranceFreightBundle\Exception\ReturnOrderNotFoundException;
 use WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository;
 use WechatMiniProgramInsuranceFreightBundle\Request\UnbindReturnOrderRequest;
 use Yiisoft\Json\Json;
@@ -34,7 +35,7 @@ class UnbindReturnOrderCommand extends LockableCommand
     {
         $order = $this->orderRepository->find($input->getArgument('shopOrderId'));
         if ($order === null) {
-            throw new \RuntimeException('找不到退货单');
+            throw new ReturnOrderNotFoundException($input->getArgument('shopOrderId'));
         }
 
         $request = new UnbindReturnOrderRequest();

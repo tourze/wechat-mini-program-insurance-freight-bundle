@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Tourze\Arrayable\ApiArrayInterface;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
+use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnOrderStatus;
@@ -18,12 +19,8 @@ use WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository;
 class ReturnOrder implements ApiArrayInterface
 , \Stringable{
     use TimestampableAware;
+    use SnowflakeKeyAware;
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
-    #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
-    private ?string $id = null;
 
     #[ORM\ManyToOne]
     private ?Account $account = null;
@@ -70,10 +67,6 @@ class ReturnOrder implements ApiArrayInterface
     #[IndexColumn]
     private ?string $reportNo = null;
 
-    public function getId(): ?string
-    {
-        return $this->id;
-    }
 
     public function getAccount(): ?Account
     {

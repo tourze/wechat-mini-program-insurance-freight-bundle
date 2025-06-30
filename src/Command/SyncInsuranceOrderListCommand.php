@@ -17,7 +17,7 @@ use WechatMiniProgramInsuranceFreightBundle\Repository\InsuranceOrderRepository;
 use WechatMiniProgramInsuranceFreightBundle\Request\GetInsuranceOrderListRequest;
 use WechatMiniProgramInsuranceFreightBundle\Service\InsuranceFreightService;
 
-#[AsCronTask('*/15 * * * *')]
+#[AsCronTask(expression: '*/15 * * * *')]
 #[AsCommand(name: self::NAME, description: '拉取保单信息到本地')]
 class SyncInsuranceOrderListCommand extends LockableCommand
 {

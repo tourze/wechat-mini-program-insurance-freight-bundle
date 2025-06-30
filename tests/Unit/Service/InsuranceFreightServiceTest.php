@@ -240,7 +240,7 @@ class InsuranceFreightServiceTest extends TestCase
 
         $this->logger->expects($this->once())
             ->method('error')
-            ->with('同步退货单信息失败', $this->callback(function ($context) {
+            ->with('同步退货单信息失败', $this->callback(function (array $context) {
                 $this->assertArrayHasKey('exception', $context);
                 $this->assertArrayHasKey('order', $context);
                 $this->assertInstanceOf(\Exception::class, $context['exception']);

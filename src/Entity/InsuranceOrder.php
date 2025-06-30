@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Tourze\Arrayable\AdminArrayInterface;
 use Tourze\Arrayable\ApiArrayInterface;
 use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
+use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramInsuranceFreightBundle\Enum\InsuranceOrderStatus;
@@ -17,12 +18,8 @@ use WechatMiniProgramInsuranceFreightBundle\Repository\InsuranceOrderRepository;
 class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
 , \Stringable{
     use TimestampableAware;
+    use SnowflakeKeyAware;
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(SnowflakeIdGenerator::class)]
-    #[ORM\Column(type: Types::BIGINT, nullable: false, options: ['comment' => 'ID'])]
-    private ?string $id = null;
 
     #[ORM\ManyToOne]
     private ?Account $account = null;
@@ -85,10 +82,6 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
     #[ORM\Column(type: Types::STRING, length: 80, nullable: true, options: ['comment' => '理赔报案号'])]
     private ?string $reportNo = null;
 
-    public function getId(): ?string
-    {
-        return $this->id;
-    }
 
     public function getOpenId(): ?string
     {

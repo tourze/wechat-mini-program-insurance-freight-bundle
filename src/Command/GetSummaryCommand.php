@@ -17,7 +17,7 @@ use WechatMiniProgramInsuranceFreightBundle\Entity\Summary;
 use WechatMiniProgramInsuranceFreightBundle\Repository\SummaryRepository;
 use WechatMiniProgramInsuranceFreightBundle\Request\GetSummaryRequest;
 
-#[AsCronTask('30 */6 * * *')]
+#[AsCronTask(expression: '30 */6 * * *')]
 #[AsCommand(name: self::NAME, description: '拉取摘要接口')]
 class GetSummaryCommand extends LockableCommand
 {

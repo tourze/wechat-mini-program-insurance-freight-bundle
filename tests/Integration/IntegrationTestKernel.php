@@ -5,9 +5,11 @@ namespace WechatMiniProgramInsuranceFreightBundle\Tests\Integration;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Tourze\DoctrineIndexedBundle\DoctrineIndexedBundle;
+use Tourze\DoctrineResolveTargetEntityBundle\DoctrineResolveTargetEntityBundle;
 use Tourze\DoctrineSnowflakeBundle\DoctrineSnowflakeBundle;
 use Tourze\DoctrineTimestampBundle\DoctrineTimestampBundle;
 use WechatMiniProgramBundle\WechatMiniProgramBundle;
@@ -20,6 +22,7 @@ class IntegrationTestKernel extends BaseKernel
     public function registerBundles(): iterable
     {
         yield new FrameworkBundle();
+        yield new DoctrineResolveTargetEntityBundle();
         yield new DoctrineBundle();
         yield new DoctrineIndexedBundle();
         yield new DoctrineSnowflakeBundle();
@@ -58,18 +61,24 @@ class IntegrationTestKernel extends BaseKernel
                     'WechatMiniProgramInsuranceFreightBundle' => [
                         'is_bundle' => false,
                         'type' => 'attribute',
-                        'dir' => '%kernel.project_dir%/packages/wechat-mini-program-insurance-freight-bundle/src/Entity',
+                        'dir' => '%kernel.project_dir%/src/Entity',
                         'prefix' => 'WechatMiniProgramInsuranceFreightBundle\Entity',
                     ],
-                    'TestEntities' => [
+                    'WechatMiniProgramBundle' => [
                         'is_bundle' => false,
                         'type' => 'attribute',
-                        'dir' => '%kernel.project_dir%/packages/wechat-mini-program-insurance-freight-bundle/tests/Integration/Entity',
-                        'prefix' => 'WechatMiniProgramInsuranceFreightBundle\Tests\Integration\Entity',
+                        'dir' => '%kernel.project_dir%/../wechat-mini-program-bundle/src/Entity',
+                        'prefix' => 'WechatMiniProgramBundle\Entity',
                     ],
                 ],
             ],
         ]);
+    }
+
+    protected function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+        // ResolveTargetEntityPass 暂时移除，因为当前包没有需要映射的接口或抽象类
     }
 
     public function getCacheDir(): string

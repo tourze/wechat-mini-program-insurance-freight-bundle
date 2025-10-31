@@ -12,7 +12,6 @@ enum ErrorCode: int implements Labelable, Itemable, Selectable
 {
     use ItemTrait;
     use SelectTrait;
-
     case MissingParameter = 2;
     case InsuranceTimeError = 1010;
     case DuplicateLogisticsNumber = 1011;

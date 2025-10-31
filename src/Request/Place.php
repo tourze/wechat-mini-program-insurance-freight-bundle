@@ -5,6 +5,9 @@ namespace WechatMiniProgramInsuranceFreightBundle\Request;
 use Tourze\Arrayable\PlainArrayInterface;
 use Yiisoft\Arrays\ArrayHelper;
 
+/**
+ * @implements PlainArrayInterface<string, mixed>
+ */
 class Place implements PlainArrayInterface
 {
     /**
@@ -67,6 +70,9 @@ class Place implements PlainArrayInterface
         $this->address = $address;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function retrievePlainArray(): array
     {
         return [
@@ -77,14 +83,27 @@ class Place implements PlainArrayInterface
         ];
     }
 
+    /**
+     * @param array<string, mixed> $item
+     */
     public static function fromArray(array $item): self
     {
         $obj = new self();
-        $obj->setProvince(ArrayHelper::getValue($item, 'province', ''));
-        $obj->setCity(ArrayHelper::getValue($item, 'city', ''));
-        $obj->setCounty(ArrayHelper::getValue($item, 'county', ''));
-        $obj->setAddress(ArrayHelper::getValue($item, 'address', ''));
+        $obj->setProvince(self::extractStringValue($item, 'province'));
+        $obj->setCity(self::extractStringValue($item, 'city'));
+        $obj->setCounty(self::extractStringValue($item, 'county'));
+        $obj->setAddress(self::extractStringValue($item, 'address'));
 
         return $obj;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private static function extractStringValue(array $data, string $key): string
+    {
+        $value = ArrayHelper::getValue($data, $key, '');
+
+        return is_string($value) ? $value : '';
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatMiniProgramInsuranceFreightBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Stringable;
+use Symfony\Component\Validator\Constraints as Assert;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramInsuranceFreightBundle\Repository\SummaryRepository;
@@ -12,41 +14,49 @@ use WechatMiniProgramInsuranceFreightBundle\Repository\SummaryRepository;
 #[ORM\Entity(repositoryClass: SummaryRepository::class)]
 #[ORM\Table(name: 'wechat_insurance_summary', options: ['comment' => '定时统计'])]
 #[ORM\UniqueConstraint(name: 'wechat_insurance_summary_idx_uniq', columns: ['account_id', 'date'])]
-class Summary implements Stringable
+class Summary implements \Stringable
 {
+    use TimestampableAware;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, options: ['comment' => 'ID'])]
-    private ?int $id = 0;
+    private int $id = 0;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
-    use TimestampableAware;
 
     #[ORM\ManyToOne]
     private ?Account $account = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '日期'])]
+    #[Assert\NotNull]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(nullable: true, options: ['comment' => '投保总数'])]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, options: ['comment' => '投保总数'])]
+    #[Assert\PositiveOrZero]
     private ?int $total = null;
 
-    #[ORM\Column(nullable: true, options: ['comment' => '理赔总数'])]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, options: ['comment' => '理赔总数'])]
+    #[Assert\PositiveOrZero]
     private ?int $claimNum = null;
 
-    #[ORM\Column(nullable: true, options: ['comment' => '理赔成功数'])]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, options: ['comment' => '理赔成功数'])]
+    #[Assert\PositiveOrZero]
     private ?int $claimSuccessNum = null;
 
-    #[ORM\Column(nullable: true, options: ['comment' => '当前保费'])]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, options: ['comment' => '当前保费'])]
+    #[Assert\PositiveOrZero]
     private ?int $premium = null;
 
-    #[ORM\Column(nullable: true, options: ['comment' => '当前账号余额'])]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, options: ['comment' => '当前账号余额'])]
+    #[Assert\PositiveOrZero]
     private ?int $funds = null;
 
-    #[ORM\Column(nullable: true, options: ['comment' => '是否不能投保'])]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true, options: ['comment' => '是否不能投保'])]
+    #[Assert\Type(type: 'bool')]
     private ?bool $needClose = null;
 
     public function getAccount(): ?Account
@@ -54,11 +64,9 @@ class Summary implements Stringable
         return $this->account;
     }
 
-    public function setAccount(?Account $account): static
+    public function setAccount(?Account $account): void
     {
         $this->account = $account;
-
-        return $this;
     }
 
     public function getDate(): ?\DateTimeInterface
@@ -66,11 +74,9 @@ class Summary implements Stringable
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setDate(\DateTimeInterface $date): void
     {
         $this->date = $date;
-
-        return $this;
     }
 
     public function getTotal(): ?int
@@ -78,11 +84,9 @@ class Summary implements Stringable
         return $this->total;
     }
 
-    public function setTotal(?int $total): static
+    public function setTotal(?int $total): void
     {
         $this->total = $total;
-
-        return $this;
     }
 
     public function getClaimNum(): ?int
@@ -90,11 +94,9 @@ class Summary implements Stringable
         return $this->claimNum;
     }
 
-    public function setClaimNum(?int $claimNum): static
+    public function setClaimNum(?int $claimNum): void
     {
         $this->claimNum = $claimNum;
-
-        return $this;
     }
 
     public function getClaimSuccessNum(): ?int
@@ -102,11 +104,9 @@ class Summary implements Stringable
         return $this->claimSuccessNum;
     }
 
-    public function setClaimSuccessNum(?int $claimSuccessNum): static
+    public function setClaimSuccessNum(?int $claimSuccessNum): void
     {
         $this->claimSuccessNum = $claimSuccessNum;
-
-        return $this;
     }
 
     public function getPremium(): ?int
@@ -114,11 +114,9 @@ class Summary implements Stringable
         return $this->premium;
     }
 
-    public function setPremium(?int $premium): static
+    public function setPremium(?int $premium): void
     {
         $this->premium = $premium;
-
-        return $this;
     }
 
     public function getFunds(): ?int
@@ -126,11 +124,9 @@ class Summary implements Stringable
         return $this->funds;
     }
 
-    public function setFunds(?int $funds): static
+    public function setFunds(?int $funds): void
     {
         $this->funds = $funds;
-
-        return $this;
     }
 
     public function isNeedClose(): ?bool
@@ -138,11 +134,9 @@ class Summary implements Stringable
         return $this->needClose;
     }
 
-    public function setNeedClose(?bool $needClose): static
+    public function setNeedClose(?bool $needClose): void
     {
         $this->needClose = $needClose;
-
-        return $this;
     }
 
     public function __toString(): string

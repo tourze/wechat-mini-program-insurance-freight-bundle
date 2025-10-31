@@ -15,7 +15,6 @@ enum InsuranceOrderStatus: int implements Labelable, Itemable, Selectable
 {
     use ItemTrait;
     use SelectTrait;
-
     case Securing = 2;
     case Claiming = 4;
     case ClaimSuccessful = 5;

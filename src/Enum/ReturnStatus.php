@@ -15,7 +15,6 @@ enum ReturnStatus: int implements Labelable, Itemable, Selectable
 {
     use ItemTrait;
     use SelectTrait;
-
     case Waiting = 0;
     case Appointment = 1;
     case Filled = 2;

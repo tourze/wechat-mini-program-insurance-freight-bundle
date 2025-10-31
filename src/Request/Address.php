@@ -4,6 +4,9 @@ namespace WechatMiniProgramInsuranceFreightBundle\Request;
 
 use Tourze\Arrayable\PlainArrayInterface;
 
+/**
+ * @implements PlainArrayInterface<string, mixed>
+ */
 class Address implements PlainArrayInterface
 {
     private string $name;
@@ -90,20 +93,36 @@ class Address implements PlainArrayInterface
         $this->address = $address;
     }
 
+    /**
+     * @param array<string, mixed> $item
+     */
     public static function fromArray(array $item): self
     {
         $obj = new self();
-        $obj->setName($item['name']);
-        $obj->setMobile($item['mobile']);
-        $obj->setCountry($item['country']);
-        $obj->setProvince($item['province']);
-        $obj->setCity($item['city']);
-        $obj->setArea($item['area']);
-        $obj->setAddress($item['address']);
+        $obj->setName(self::extractStringValue($item, 'name'));
+        $obj->setMobile(self::extractStringValue($item, 'mobile'));
+        $obj->setCountry(self::extractStringValue($item, 'country'));
+        $obj->setProvince(self::extractStringValue($item, 'province'));
+        $obj->setCity(self::extractStringValue($item, 'city'));
+        $obj->setArea(self::extractStringValue($item, 'area'));
+        $obj->setAddress(self::extractStringValue($item, 'address'));
 
         return $obj;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
+    private static function extractStringValue(array $data, string $key): string
+    {
+        $value = $data[$key] ?? '';
+
+        return is_string($value) ? $value : '';
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
     public function retrievePlainArray(): array
     {
         return [

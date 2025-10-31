@@ -56,6 +56,9 @@ class CreateInsuranceOrderRequest extends WithAccountRequest
         return '/wxa/business/insurance_freight/createorder';
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         return [

@@ -21,6 +21,9 @@ class GetReturnOrderRequest extends WithAccountRequest
         return '/cgi-bin/express/delivery/no_worry_return/get';
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         $payload = [

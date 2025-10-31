@@ -19,3 +19,10 @@ services:
     resource: '../../Repository/'
   WechatMiniProgramInsuranceFreightBundle\Service\:
     resource: '../../Service/'
+
+  # 外部依赖服务配置 - 用于测试
+  WechatMiniProgramBundle\Repository\AccountRepository:
+    public: true
+  
+  WechatMiniProgramBundle\Service\Client:
+    public: true

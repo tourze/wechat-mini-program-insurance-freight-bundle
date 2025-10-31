@@ -15,7 +15,6 @@ enum ReturnOrderStatus: int implements Labelable, Itemable, Selectable
 {
     use ItemTrait;
     use SelectTrait;
-
     case Ordered = 0;
     case PickedUp = 1;
     case InTransit = 2;

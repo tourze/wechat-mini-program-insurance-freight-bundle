@@ -15,7 +15,6 @@ enum SortDirect: int implements Labelable, Itemable, Selectable
 {
     use ItemTrait;
     use SelectTrait;
-
     case ASC = 0;
     case DESC = 1;
 

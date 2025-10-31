@@ -32,17 +32,23 @@ class SyncValidReturnOrdersCommand extends LockableCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $dayCount = $this->getSyncReturnOrderDayCount();
+
         $orders = $this->orderRepository->createQueryBuilder('a')
             ->where('(a.orderStatus IS NULL OR a.orderStatus NOT IN (:statusList)) AND a.createTime>:minTime')
             ->setParameter('statusList', [
                 ReturnOrderStatus::Cancelled,
             ])
-            ->setParameter('minTime', CarbonImmutable::now()->subDays($_ENV['WECHAT_INSURANCE_SYNC_RETURN_ORDER_DAY_NUM'] ?? 15))
+            ->setParameter('minTime', CarbonImmutable::now()->subDays($dayCount))
             ->getQuery()
-            ->toIterable();
+            ->toIterable()
+        ;
 
         foreach ($orders as $order) {
-            /* @var ReturnOrder $order */
+            if (!$order instanceof ReturnOrder) {
+                continue;
+            }
+
             $output->writeln("开始异步检查：{$order->getId()}");
 
             $message = new RunCommandMessage();
@@ -54,5 +60,20 @@ class SyncValidReturnOrdersCommand extends LockableCommand
         }
 
         return Command::SUCCESS;
+    }
+
+    private function getSyncReturnOrderDayCount(): int
+    {
+        $envValue = $_ENV['WECHAT_INSURANCE_SYNC_RETURN_ORDER_DAY_NUM'] ?? '15';
+
+        if (is_int($envValue)) {
+            return $envValue;
+        }
+
+        if (is_string($envValue) && is_numeric($envValue)) {
+            return (int) $envValue;
+        }
+
+        return 15; // 默认值
     }
 }

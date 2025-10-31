@@ -55,7 +55,7 @@ class GetInsuranceOrderListRequest extends WithAccountRequest
     private ?CarbonInterface $endTime = null;
 
     /**
-     * @var array|InsuranceOrderStatus[]|null
+     * @var array<int, InsuranceOrderStatus>|null
      */
     private ?array $statusList = null;
 
@@ -79,52 +79,103 @@ class GetInsuranceOrderListRequest extends WithAccountRequest
         return '/wxa/business/insurance_freight/getorderlist';
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         $json = [];
-        if (null !== $this->getOpenId()) {
-            $json['openid'] = $this->getOpenId();
-        }
-        if (null !== $this->getOrderNo()) {
-            $json['order_no'] = $this->getOrderNo();
-        }
-        if (null !== $this->getPolicyNo()) {
-            $json['policy_no'] = $this->getPolicyNo();
-        }
-        if (null !== $this->getReportNo()) {
-            $json['report_no'] = $this->getReportNo();
-        }
-        if (null !== $this->getDeliveryNo()) {
-            $json['delivery_no'] = $this->getDeliveryNo();
-        }
-        if (null !== $this->getRefundDeliveryNo()) {
-            $json['refund_delivery_no'] = $this->getRefundDeliveryNo();
-        }
-        if (null !== $this->getBeginTime()) {
-            $json['begin_time'] = $this->getBeginTime()->getTimestamp();
-        }
-        if (null !== $this->getEndTime()) {
-            $json['end_time'] = $this->getEndTime()->getTimestamp();
-        }
-        if (null !== $this->getStatusList()) {
-            $json['status_list'] = [];
-            foreach ($this->getStatusList() as $item) {
-                $json['status_list'][] = $item->value;
+
+        $json = array_merge($json, $this->getStringFields());
+        $json = array_merge($json, $this->getTimeFields());
+        $json = array_merge($json, $this->getComplexFields());
+        $json = array_merge($json, $this->getPaginationFields());
+
+        return ['json' => $json];
+    }
+
+    /**
+     * 获取字符串字段
+     *
+     * @return array<string, mixed>
+     */
+    private function getStringFields(): array
+    {
+        $result = [];
+        $fields = [
+            'openid' => $this->getOpenId(),
+            'order_no' => $this->getOrderNo(),
+            'policy_no' => $this->getPolicyNo(),
+            'report_no' => $this->getReportNo(),
+            'delivery_no' => $this->getDeliveryNo(),
+            'refund_delivery_no' => $this->getRefundDeliveryNo(),
+        ];
+
+        foreach ($fields as $key => $value) {
+            if (null !== $value) {
+                $result[$key] = $value;
             }
         }
-        if (null !== $this->getOffset()) {
-            $json['offset'] = $this->getOffset();
+
+        return $result;
+    }
+
+    /**
+     * 获取时间字段
+     *
+     * @return array<string, mixed>
+     */
+    private function getTimeFields(): array
+    {
+        $result = [];
+
+        if (null !== $this->getBeginTime()) {
+            $result['begin_time'] = $this->getBeginTime()->getTimestamp();
         }
-        if (null !== $this->getLimit()) {
-            $json['limit'] = $this->getLimit();
-        }
-        if (null !== $this->getSortDirect()) {
-            $json['sort_direct'] = $this->getSortDirect()->value;
+        if (null !== $this->getEndTime()) {
+            $result['end_time'] = $this->getEndTime()->getTimestamp();
         }
 
-        return [
-            'json' => $json,
-        ];
+        return $result;
+    }
+
+    /**
+     * 获取复杂字段
+     *
+     * @return array<string, mixed>
+     */
+    private function getComplexFields(): array
+    {
+        $result = [];
+
+        if (null !== $this->getStatusList()) {
+            $result['status_list'] = array_map(fn ($item) => $item->value, $this->getStatusList());
+        }
+
+        if (null !== $this->getSortDirect()) {
+            $result['sort_direct'] = $this->getSortDirect()->value;
+        }
+
+        return $result;
+    }
+
+    /**
+     * 获取分页字段
+     *
+     * @return array<string, mixed>
+     */
+    private function getPaginationFields(): array
+    {
+        $result = [];
+
+        if (null !== $this->getOffset()) {
+            $result['offset'] = $this->getOffset();
+        }
+        if (null !== $this->getLimit()) {
+            $result['limit'] = $this->getLimit();
+        }
+
+        return $result;
     }
 
     public function getOpenId(): ?string
@@ -207,11 +258,17 @@ class GetInsuranceOrderListRequest extends WithAccountRequest
         $this->endTime = $endTime;
     }
 
+    /**
+     * @return array<int, InsuranceOrderStatus>|null
+     */
     public function getStatusList(): ?array
     {
         return $this->statusList;
     }
 
+    /**
+     * @param array<int, InsuranceOrderStatus>|null $statusList
+     */
     public function setStatusList(?array $statusList): void
     {
         $this->statusList = $statusList;

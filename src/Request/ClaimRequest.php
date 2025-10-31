@@ -39,6 +39,9 @@ class ClaimRequest extends WithAccountRequest
         return '/wxa/business/insurance_freight/claim';
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         $payload = [

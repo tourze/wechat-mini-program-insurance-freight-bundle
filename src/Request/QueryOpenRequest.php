@@ -16,6 +16,9 @@ class QueryOpenRequest extends WithAccountRequest
         return '/wxa/business/insurance_freight/query_open';
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         return [

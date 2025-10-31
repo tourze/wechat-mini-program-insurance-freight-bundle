@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Tourze\LockCommandBundle\Command\LockableCommand;
+use WechatMiniProgramInsuranceFreightBundle\Entity\ReturnOrder;
 use WechatMiniProgramInsuranceFreightBundle\Exception\ReturnOrderNotFoundException;
 use WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository;
 use WechatMiniProgramInsuranceFreightBundle\Service\InsuranceFreightService;
@@ -27,16 +28,22 @@ class SyncSingleReturnOrderCommand extends LockableCommand
     protected function configure(): void
     {
         $this->setDescription('同步单个退货信息到本地')
-            ->addArgument('shopOrderId', InputArgument::REQUIRED, '商家内部系统使用的退货编号');
+            ->addArgument('shopOrderId', InputArgument::REQUIRED, '商家内部系统使用的退货编号')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $shopOrderId = $input->getArgument('shopOrderId');
+        if (!is_string($shopOrderId)) {
+            throw new \InvalidArgumentException('shopOrderId must be a string');
+        }
+
         $order = $this->orderRepository->findOneBy([
-            'shopOrderId' => $input->getArgument('shopOrderId'),
+            'shopOrderId' => $shopOrderId,
         ]);
-        if ($order === null) {
-            throw new ReturnOrderNotFoundException($input->getArgument('shopOrderId'));
+        if (!$order instanceof ReturnOrder) {
+            throw new ReturnOrderNotFoundException($shopOrderId);
         }
 
         $this->insuranceFreightService->syncReturnOrder($order);

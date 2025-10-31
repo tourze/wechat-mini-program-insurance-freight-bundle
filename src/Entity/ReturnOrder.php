@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatMiniProgramInsuranceFreightBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Tourze\Arrayable\ApiArrayInterface;
 use Tourze\DoctrineIndexedBundle\Attribute\IndexColumn;
-use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use WechatMiniProgramBundle\Entity\Account;
@@ -14,70 +16,93 @@ use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnOrderStatus;
 use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnStatus;
 use WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository;
 
+/**
+ * @implements ApiArrayInterface<string, mixed>
+ */
 #[ORM\Entity(repositoryClass: ReturnOrderRepository::class)]
 #[ORM\Table(name: 'wechat_mini_program_insurance_return_order', options: ['comment' => '退货单'])]
-class ReturnOrder implements ApiArrayInterface
-, \Stringable{
+class ReturnOrder implements ApiArrayInterface, \Stringable
+{
     use TimestampableAware;
     use SnowflakeKeyAware;
-
 
     #[ORM\ManyToOne]
     private ?Account $account = null;
 
     #[ORM\Column(length: 64, unique: true, options: ['comment' => '商家内部系统使用的退货编号'])]
+    #[Assert\Length(max: 64)]
     private ?string $shopOrderId = null;
 
-    #[ORM\Column(options: ['comment' => '商家退货地址'])]
+    /**
+     * @var array<string, mixed>
+     */
+    #[ORM\Column(type: Types::JSON, options: ['comment' => '商家退货地址'])]
+    #[Assert\NotNull]
     private array $bizAddress = [];
 
-    #[ORM\Column(options: ['comment' => '用户购物时的收货地址'])]
+    /**
+     * @var array<string, mixed>
+     */
+    #[ORM\Column(type: Types::JSON, options: ['comment' => '用户购物时的收货地址'])]
+    #[Assert\NotNull]
     private array $userAddress = [];
 
     #[ORM\Column(length: 64, options: ['comment' => '退货用户的openid'])]
+    #[Assert\Length(max: 64)]
     private ?string $openId = null;
 
     #[ORM\Column(length: 255, nullable: true, options: ['comment' => '退货订单在商家小程序的path'])]
+    #[Assert\Length(max: 255)]
     private ?string $orderPath = null;
 
-    #[ORM\Column(nullable: true, options: ['comment' => '退货商品list'])]
+    /**
+     * @var array<int, array<string, mixed>>|null
+     */
+    #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '退货商品list'])]
+    #[Assert\Type(type: 'array')]
     private ?array $goodsList = null;
 
     #[ORM\Column(length: 64, options: ['comment' => '微信支付单号'])]
+    #[Assert\Length(max: 64)]
     private ?string $wxPayId = null;
 
     #[ORM\Column(length: 60, nullable: true, options: ['comment' => '运单号'])]
+    #[Assert\Length(max: 60)]
     private ?string $waybillId = null;
 
-    #[ORM\Column(nullable: true, enumType: ReturnStatus::class, options: ['comment' => '退货状态'])]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: ReturnStatus::class, options: ['comment' => '退货状态'])]
+    #[Assert\Choice(callback: [ReturnStatus::class, 'cases'])]
     private ?ReturnStatus $status = null;
 
-    #[ORM\Column(nullable: true, enumType: ReturnOrderStatus::class, options: ['comment' => '运单状态'])]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: ReturnOrderStatus::class, options: ['comment' => '运单状态'])]
+    #[Assert\Choice(callback: [ReturnOrderStatus::class, 'cases'])]
     private ?ReturnOrderStatus $orderStatus = null;
 
     #[ORM\Column(length: 50, nullable: true, options: ['comment' => '运力公司名称'])]
+    #[Assert\Length(max: 50)]
     private ?string $deliveryName = null;
 
     #[ORM\Column(length: 20, nullable: true, options: ['comment' => '运力公司编码'])]
+    #[Assert\Length(max: 20)]
     private ?string $deliveryId = null;
 
     #[ORM\Column(length: 50, nullable: true, options: ['comment' => '退货ID'])]
+    #[Assert\Length(max: 50)]
     private ?string $returnId = null;
 
+    #[ORM\Column(length: 80, nullable: true, options: ['comment' => '理赔报案号'])]
     #[IndexColumn]
+    #[Assert\Length(max: 80)]
     private ?string $reportNo = null;
-
 
     public function getAccount(): ?Account
     {
         return $this->account;
     }
 
-    public function setAccount(?Account $account): static
+    public function setAccount(?Account $account): void
     {
         $this->account = $account;
-
-        return $this;
     }
 
     public function getShopOrderId(): ?string
@@ -85,35 +110,67 @@ class ReturnOrder implements ApiArrayInterface
         return $this->shopOrderId;
     }
 
-    public function setShopOrderId(string $shopOrderId): static
+    public function setShopOrderId(string $shopOrderId): void
     {
         $this->shopOrderId = $shopOrderId;
-
-        return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getBizAddress(): array
     {
         return $this->bizAddress;
     }
 
-    public function setBizAddress(array $bizAddress): static
+    /**
+     * @param array<string, mixed> $bizAddress
+     */
+    public function setBizAddress(array $bizAddress): void
     {
         $this->bizAddress = $bizAddress;
-
-        return $this;
     }
 
+    /**
+     * 获取商家退货地址的字符串表示（用于表单显示）
+     */
+    public function getBizAddressString(): string
+    {
+        $result = json_encode($this->bizAddress, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        if (false === $result) {
+            return '';
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
     public function getUserAddress(): array
     {
         return $this->userAddress;
     }
 
-    public function setUserAddress(array $userAddress): static
+    /**
+     * @param array<string, mixed> $userAddress
+     */
+    public function setUserAddress(array $userAddress): void
     {
         $this->userAddress = $userAddress;
+    }
 
-        return $this;
+    /**
+     * 获取用户收货地址的字符串表示（用于表单显示）
+     */
+    public function getUserAddressString(): string
+    {
+        $result = json_encode($this->userAddress, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        if (false === $result) {
+            return '';
+        }
+
+        return $result;
     }
 
     public function getOpenId(): ?string
@@ -121,11 +178,9 @@ class ReturnOrder implements ApiArrayInterface
         return $this->openId;
     }
 
-    public function setOpenId(string $openId): static
+    public function setOpenId(string $openId): void
     {
         $this->openId = $openId;
-
-        return $this;
     }
 
     public function getOrderPath(): ?string
@@ -133,23 +188,38 @@ class ReturnOrder implements ApiArrayInterface
         return $this->orderPath;
     }
 
-    public function setOrderPath(?string $orderPath): static
+    public function setOrderPath(?string $orderPath): void
     {
         $this->orderPath = $orderPath;
-
-        return $this;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>|null
+     */
     public function getGoodsList(): ?array
     {
         return $this->goodsList;
     }
 
-    public function setGoodsList(?array $goodsList): static
+    /**
+     * @param array<int, array<string, mixed>>|null $goodsList
+     */
+    public function setGoodsList(?array $goodsList): void
     {
         $this->goodsList = $goodsList;
+    }
 
-        return $this;
+    /**
+     * 获取商品列表的字符串表示（用于表单显示）
+     */
+    public function getGoodsListString(): string
+    {
+        $result = json_encode($this->goodsList, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        if (false === $result) {
+            return '';
+        }
+
+        return $result;
     }
 
     public function getWxPayId(): ?string
@@ -157,11 +227,9 @@ class ReturnOrder implements ApiArrayInterface
         return $this->wxPayId;
     }
 
-    public function setWxPayId(string $wxPayId): static
+    public function setWxPayId(string $wxPayId): void
     {
         $this->wxPayId = $wxPayId;
-
-        return $this;
     }
 
     public function getWaybillId(): ?string
@@ -169,11 +237,9 @@ class ReturnOrder implements ApiArrayInterface
         return $this->waybillId;
     }
 
-    public function setWaybillId(?string $waybillId): static
+    public function setWaybillId(?string $waybillId): void
     {
         $this->waybillId = $waybillId;
-
-        return $this;
     }
 
     public function getOrderStatus(): ?ReturnOrderStatus
@@ -181,11 +247,9 @@ class ReturnOrder implements ApiArrayInterface
         return $this->orderStatus;
     }
 
-    public function setOrderStatus(?ReturnOrderStatus $orderStatus): static
+    public function setOrderStatus(?ReturnOrderStatus $orderStatus): void
     {
         $this->orderStatus = $orderStatus;
-
-        return $this;
     }
 
     public function getDeliveryName(): ?string
@@ -193,11 +257,9 @@ class ReturnOrder implements ApiArrayInterface
         return $this->deliveryName;
     }
 
-    public function setDeliveryName(?string $deliveryName): static
+    public function setDeliveryName(?string $deliveryName): void
     {
         $this->deliveryName = $deliveryName;
-
-        return $this;
     }
 
     public function getDeliveryId(): ?string
@@ -205,11 +267,9 @@ class ReturnOrder implements ApiArrayInterface
         return $this->deliveryId;
     }
 
-    public function setDeliveryId(?string $deliveryId): static
+    public function setDeliveryId(?string $deliveryId): void
     {
         $this->deliveryId = $deliveryId;
-
-        return $this;
     }
 
     public function getReturnId(): ?string
@@ -217,11 +277,9 @@ class ReturnOrder implements ApiArrayInterface
         return $this->returnId;
     }
 
-    public function setReturnId(?string $returnId): static
+    public function setReturnId(?string $returnId): void
     {
         $this->returnId = $returnId;
-
-        return $this;
     }
 
     public function getStatus(): ?ReturnStatus
@@ -229,11 +287,9 @@ class ReturnOrder implements ApiArrayInterface
         return $this->status;
     }
 
-    public function setStatus(?ReturnStatus $status): static
+    public function setStatus(?ReturnStatus $status): void
     {
         $this->status = $status;
-
-        return $this;
     }
 
     public function getReportNo(): ?string
@@ -246,6 +302,9 @@ class ReturnOrder implements ApiArrayInterface
         $this->reportNo = $reportNo;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function retrieveApiArray(): array
     {
         return [

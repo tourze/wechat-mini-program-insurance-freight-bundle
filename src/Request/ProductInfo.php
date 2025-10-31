@@ -4,6 +4,9 @@ namespace WechatMiniProgramInsuranceFreightBundle\Request;
 
 use Tourze\Arrayable\PlainArrayInterface;
 
+/**
+ * @implements PlainArrayInterface<string, mixed>
+ */
 class ProductInfo implements PlainArrayInterface
 {
     /**
@@ -12,7 +15,7 @@ class ProductInfo implements PlainArrayInterface
     private string $orderPath;
 
     /**
-     * @var Goods[] 投保订单商品列表
+     * @var array<int, Goods> 投保订单商品列表
      */
     private array $goodsList;
 
@@ -26,11 +29,17 @@ class ProductInfo implements PlainArrayInterface
         $this->orderPath = $orderPath;
     }
 
+    /**
+     * @return array<int, Goods>
+     */
     public function getGoodsList(): array
     {
         return $this->goodsList;
     }
 
+    /**
+     * @param array<int, Goods> $goodsList
+     */
     public function setGoodsList(array $goodsList): void
     {
         $this->goodsList = $goodsList;
@@ -41,6 +50,9 @@ class ProductInfo implements PlainArrayInterface
         $this->goodsList[] = $goods;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function retrievePlainArray(): array
     {
         $goodsList = [];

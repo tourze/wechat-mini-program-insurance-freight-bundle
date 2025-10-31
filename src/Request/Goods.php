@@ -6,6 +6,7 @@ use Tourze\Arrayable\PlainArrayInterface;
 
 /**
  * 投保订单商品
+ * @implements PlainArrayInterface<string, mixed>
  */
 class Goods implements PlainArrayInterface
 {
@@ -39,6 +40,9 @@ class Goods implements PlainArrayInterface
         $this->url = $url;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function retrievePlainArray(): array
     {
         return [
@@ -47,12 +51,25 @@ class Goods implements PlainArrayInterface
         ];
     }
 
+    /**
+     * @param array<string, mixed> $item
+     */
     public static function fromArray(array $item): self
     {
         $obj = new self();
-        $obj->setName($item['name']);
-        $obj->setUrl($item['url']);
+        $obj->setName(self::extractStringValue($item, 'name'));
+        $obj->setUrl(self::extractStringValue($item, 'url'));
 
         return $obj;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    private static function extractStringValue(array $data, string $key): string
+    {
+        $value = $data[$key] ?? '';
+
+        return is_string($value) ? $value : '';
     }
 }

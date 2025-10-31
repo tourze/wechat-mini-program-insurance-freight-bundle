@@ -42,7 +42,7 @@ class CreateReturnOrderRequest extends WithAccountRequest
     private string $orderPath;
 
     /**
-     * @var array|Goods[] 退货商品list，一个元素为对象的数组,结构如下↓ 如投保时已传入订单商品信息，则以投保时传入的为准
+     * @var array<int, Goods|array<string, mixed>> 退货商品list，一个元素为对象的数组,结构如下↓ 如投保时已传入订单商品信息，则以投保时传入的为准
      */
     private array $goodsList;
 
@@ -51,6 +51,9 @@ class CreateReturnOrderRequest extends WithAccountRequest
         return '/cgi-bin/express/delivery/no_worry_return/add';
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getRequestOptions(): ?array
     {
         $goodsList = [];
@@ -131,11 +134,17 @@ class CreateReturnOrderRequest extends WithAccountRequest
         $this->orderPath = $orderPath;
     }
 
+    /**
+     * @return array<int, Goods|array<string, mixed>>
+     */
     public function getGoodsList(): array
     {
         return $this->goodsList;
     }
 
+    /**
+     * @param array<int, Goods|array<string, mixed>> $goodsList
+     */
     public function setGoodsList(array $goodsList): void
     {
         $this->goodsList = $goodsList;

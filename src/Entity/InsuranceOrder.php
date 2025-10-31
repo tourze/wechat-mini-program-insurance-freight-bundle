@@ -1,94 +1,163 @@
 <?php
 
+declare(strict_types=1);
+
 namespace WechatMiniProgramInsuranceFreightBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Tourze\Arrayable\AdminArrayInterface;
 use Tourze\Arrayable\ApiArrayInterface;
-use Tourze\DoctrineSnowflakeBundle\Service\SnowflakeIdGenerator;
 use Tourze\DoctrineSnowflakeBundle\Traits\SnowflakeKeyAware;
 use Tourze\DoctrineTimestampBundle\Traits\TimestampableAware;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramInsuranceFreightBundle\Enum\InsuranceOrderStatus;
 use WechatMiniProgramInsuranceFreightBundle\Repository\InsuranceOrderRepository;
 
+/**
+ * @implements ApiArrayInterface<string, mixed>
+ * @implements AdminArrayInterface<string, mixed>
+ */
 #[ORM\Entity(repositoryClass: InsuranceOrderRepository::class)]
 #[ORM\Table(name: 'wechat_mini_program_insurance_freight_order', options: ['comment' => '运费险订单'])]
-class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
-, \Stringable{
+class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface, \Stringable
+{
     use TimestampableAware;
     use SnowflakeKeyAware;
-
 
     #[ORM\ManyToOne]
     private ?Account $account = null;
 
     #[ORM\Column(type: Types::STRING, length: 80, options: ['comment' => '买家openid'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 80)]
     private string $openId;
 
     #[ORM\Column(type: Types::STRING, length: 80, unique: true, options: ['comment' => '微信支付单号'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 80)]
     private string $orderNo;
 
+    #[ORM\Column(type: Types::INTEGER, enumType: InsuranceOrderStatus::class, options: ['comment' => '订单状态'])]
+    #[Assert\NotNull]
+    #[Assert\Choice(callback: [InsuranceOrderStatus::class, 'cases'])]
     private InsuranceOrderStatus $status;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '支付时间'])]
+    #[Assert\NotNull]
     private \DateTimeInterface $payTime;
 
+    #[ORM\Column(type: Types::INTEGER, options: ['comment' => '支付金额（分）'])]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private int $payAmount;
 
+    #[ORM\Column(type: Types::INTEGER, options: ['comment' => '预估金额（分）'])]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private int $estimateAmount;
 
+    #[ORM\Column(type: Types::INTEGER, options: ['comment' => '保费（分）'])]
+    #[Assert\NotNull]
+    #[Assert\PositiveOrZero]
     private int $premium;
 
+    #[ORM\Column(type: Types::STRING, length: 100, options: ['comment' => '快递单号'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
     private string $deliveryNo;
 
+    #[ORM\Column(type: Types::STRING, length: 50, options: ['comment' => '发货省份'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     private string $deliveryPlaceProvince;
 
+    #[ORM\Column(type: Types::STRING, length: 50, options: ['comment' => '发货城市'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     private string $deliveryPlaceCity;
 
+    #[ORM\Column(type: Types::STRING, length: 50, options: ['comment' => '发货区县'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     private string $deliveryPlaceCounty;
 
+    #[ORM\Column(type: Types::STRING, length: 200, options: ['comment' => '发货详细地址'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 200)]
     private string $deliveryPlaceAddress;
 
+    #[ORM\Column(type: Types::STRING, length: 50, options: ['comment' => '收货省份'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     private string $receiptPlaceProvince;
 
+    #[ORM\Column(type: Types::STRING, length: 50, options: ['comment' => '收货城市'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     private string $receiptPlaceCity;
 
+    #[ORM\Column(type: Types::STRING, length: 50, options: ['comment' => '收货区县'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     private string $receiptPlaceCounty;
 
+    #[ORM\Column(type: Types::STRING, length: 200, options: ['comment' => '收货详细地址'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 200)]
     private string $receiptPlaceAddress;
 
+    #[ORM\Column(type: Types::STRING, length: 100, options: ['comment' => '保单号'])]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
     private string $policyNo;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['comment' => '保险结束时间'])]
+    #[Assert\NotNull]
     private \DateTimeInterface $insuranceEndDate;
 
     #[ORM\Column(type: Types::STRING, length: 80, nullable: true, options: ['comment' => '退款运单号'])]
+    #[Assert\Length(max: 80)]
     private ?string $refundDeliveryNo = null;
 
+    #[ORM\Column(type: Types::STRING, length: 100, nullable: true, options: ['comment' => '退款公司'])]
+    #[Assert\Length(max: 100)]
     private ?string $refundCompany = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => '支付失败原因'])]
+    #[Assert\Length(max: 65535)]
     private ?string $payFailReason = null;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true, options: ['comment' => '支付完成时间'])]
+    #[Assert\Type(type: '\DateTimeInterface')]
     private ?\DateTimeInterface $payFinishTime = null;
 
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true, options: ['comment' => '是否上门取件'])]
+    #[Assert\Type(type: 'bool')]
     private ?bool $homePickUp = null;
 
     #[ORM\Column(length: 200, nullable: true, options: ['comment' => '投保订单在商家小程序的path'])]
+    #[Assert\Length(max: 200)]
     private ?string $orderPath = null;
 
-    #[ORM\Column(nullable: true, options: ['comment' => '投保订单商品列表'])]
+    /**
+     * @var array<int, array<string, mixed>>|null
+     */
+    #[ORM\Column(type: Types::JSON, nullable: true, options: ['comment' => '投保订单商品列表'])]
+    #[Assert\Type(type: 'array')]
     private ?array $goodsList = null;
 
     #[ORM\Column(type: Types::STRING, length: 80, nullable: true, options: ['comment' => '理赔报案号'])]
+    #[Assert\Length(max: 80)]
     private ?string $reportNo = null;
-
 
     public function getOpenId(): ?string
     {
         return $this->openId;
     }
 
-    public function setOpenId(?string $openId): void
+    public function setOpenId(string $openId): void
     {
         $this->openId = $openId;
     }
@@ -288,11 +357,9 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
         return $this->account;
     }
 
-    public function setAccount(?Account $account): static
+    public function setAccount(?Account $account): void
     {
         $this->account = $account;
-
-        return $this;
     }
 
     public function getPayFailReason(): ?string
@@ -300,11 +367,9 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
         return $this->payFailReason;
     }
 
-    public function setPayFailReason(?string $payFailReason): static
+    public function setPayFailReason(?string $payFailReason): void
     {
         $this->payFailReason = $payFailReason;
-
-        return $this;
     }
 
     public function getPayFinishTime(): ?\DateTimeInterface
@@ -312,11 +377,9 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
         return $this->payFinishTime;
     }
 
-    public function setPayFinishTime(?\DateTimeInterface $payFinishTime): static
+    public function setPayFinishTime(?\DateTimeInterface $payFinishTime): void
     {
         $this->payFinishTime = $payFinishTime;
-
-        return $this;
     }
 
     public function isHomePickUp(): ?bool
@@ -324,11 +387,9 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
         return $this->homePickUp;
     }
 
-    public function setHomePickUp(?bool $homePickUp): static
+    public function setHomePickUp(?bool $homePickUp): void
     {
         $this->homePickUp = $homePickUp;
-
-        return $this;
     }
 
     public function getOrderPath(): ?string
@@ -336,23 +397,25 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
         return $this->orderPath;
     }
 
-    public function setOrderPath(?string $orderPath): static
+    public function setOrderPath(?string $orderPath): void
     {
         $this->orderPath = $orderPath;
-
-        return $this;
     }
 
+    /**
+     * @return array<int, array<string, mixed>>|null
+     */
     public function getGoodsList(): ?array
     {
         return $this->goodsList;
     }
 
-    public function setGoodsList(?array $goodsList): static
+    /**
+     * @param array<int, array<string, mixed>>|null $goodsList
+     */
+    public function setGoodsList(?array $goodsList): void
     {
         $this->goodsList = $goodsList;
-
-        return $this;
     }
 
     public function getReportNo(): ?string
@@ -365,6 +428,9 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
         $this->reportNo = $reportNo;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function retrieveApiArray(): array
     {
         return [
@@ -382,6 +448,9 @@ class InsuranceOrder implements ApiArrayInterface, AdminArrayInterface
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function retrieveAdminArray(): array
     {
         return [

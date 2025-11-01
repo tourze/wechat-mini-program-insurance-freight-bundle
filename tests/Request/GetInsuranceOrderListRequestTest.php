@@ -3,7 +3,7 @@
 namespace WechatMiniProgramInsuranceFreightBundle\Tests\Request;
 
 use Carbon\CarbonImmutable;
-use HttpClientBundle\Tests\Request\RequestTestCase;
+use HttpClientBundle\Test\RequestTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use WechatMiniProgramBundle\Entity\Account;
 use WechatMiniProgramInsuranceFreightBundle\Enum\SortDirect;

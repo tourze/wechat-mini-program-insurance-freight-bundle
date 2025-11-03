@@ -8,6 +8,7 @@ use Tourze\BundleDependency\BundleDependencyInterface;
 use Tourze\DoctrineIndexedBundle\DoctrineIndexedBundle;
 use WechatMiniProgramAuthBundle\WechatMiniProgramAuthBundle;
 use WechatMiniProgramBundle\WechatMiniProgramBundle;
+use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 
 class WechatMiniProgramInsuranceFreightBundle extends Bundle implements BundleDependencyInterface
 {
@@ -18,6 +19,7 @@ class WechatMiniProgramInsuranceFreightBundle extends Bundle implements BundleDe
             DoctrineIndexedBundle::class => ['all' => true],
             WechatMiniProgramBundle::class => ['all' => true],
             WechatMiniProgramAuthBundle::class => ['all' => true],
+            EasyAdminMenuBundle::class => ['all' => true],
         ];
     }
 }

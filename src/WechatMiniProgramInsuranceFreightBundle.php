@@ -6,9 +6,9 @@ use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Tourze\BundleDependency\BundleDependencyInterface;
 use Tourze\DoctrineIndexedBundle\DoctrineIndexedBundle;
+use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 use WechatMiniProgramAuthBundle\WechatMiniProgramAuthBundle;
 use WechatMiniProgramBundle\WechatMiniProgramBundle;
-use Tourze\EasyAdminMenuBundle\EasyAdminMenuBundle;
 
 class WechatMiniProgramInsuranceFreightBundle extends Bundle implements BundleDependencyInterface
 {

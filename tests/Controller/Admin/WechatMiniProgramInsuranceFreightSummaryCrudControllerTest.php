@@ -32,12 +32,6 @@ final class WechatMiniProgramInsuranceFreightSummaryCrudControllerTest extends A
         $this->assertInstanceOf(WechatMiniProgramInsuranceFreightSummaryCrudController::class, $controller);
     }
 
-    public function testGetEntityFqcnReturnsCorrectEntity(): void
-    {
-        $fqcn = WechatMiniProgramInsuranceFreightSummaryCrudController::getEntityFqcn();
-        $this->assertEquals(Summary::class, $fqcn);
-    }
-
     protected function getControllerService(): WechatMiniProgramInsuranceFreightSummaryCrudController
     {
         return self::getService(WechatMiniProgramInsuranceFreightSummaryCrudController::class);

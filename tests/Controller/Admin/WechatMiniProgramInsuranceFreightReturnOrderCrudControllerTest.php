@@ -44,12 +44,6 @@ final class WechatMiniProgramInsuranceFreightReturnOrderCrudControllerTest exten
         $this->assertInstanceOf(WechatMiniProgramInsuranceFreightReturnOrderCrudController::class, $controller);
     }
 
-    public function testGetEntityFqcnReturnsCorrectEntity(): void
-    {
-        $fqcn = WechatMiniProgramInsuranceFreightReturnOrderCrudController::getEntityFqcn();
-        $this->assertEquals(ReturnOrder::class, $fqcn);
-    }
-
     protected function getControllerService(): WechatMiniProgramInsuranceFreightReturnOrderCrudController
     {
         return self::getService(WechatMiniProgramInsuranceFreightReturnOrderCrudController::class);

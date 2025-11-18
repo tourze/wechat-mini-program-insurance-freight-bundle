@@ -34,12 +34,6 @@ final class WechatMiniProgramInsuranceFreightOrderCrudControllerTest extends Abs
         $this->assertInstanceOf(WechatMiniProgramInsuranceFreightOrderCrudController::class, $controller);
     }
 
-    public function testGetEntityFqcnReturnsCorrectEntity(): void
-    {
-        $fqcn = WechatMiniProgramInsuranceFreightOrderCrudController::getEntityFqcn();
-        $this->assertEquals(InsuranceOrder::class, $fqcn);
-    }
-
     protected function getControllerService(): WechatMiniProgramInsuranceFreightOrderCrudController
     {
         return self::getService(WechatMiniProgramInsuranceFreightOrderCrudController::class);

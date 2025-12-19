@@ -31,46 +31,33 @@ final class CreateReturnOrderRequestTest extends RequestTestCase
 
     public function testGetRequestOptionsWithValidData(): void
     {
-        // 准备测试数据
-        // Mock具体类说明: WechatMiniProgramBundle\Entity\Account是数据实体类，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证业务逻辑。
-        // 使用具体类Mock是合理的，因为Entity类主要包含数据属性和简单的getter/setter方法。
-        // 替代方案：可以考虑创建测试专用的Entity工厂类，但当前Mock方式更直观简洁。
-        $account = $this->createMock(Account::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Address是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其retrievePlainArray方法来验证地址数据转换逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Address对象，但Mock方式可以提供更可控的测试数据。
-        $bizAddress = $this->createMock(Address::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Address是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其retrievePlainArray方法来验证用户地址数据转换逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Address对象，但Mock方式可以提供更可控的测试数据。
-        $userAddress = $this->createMock(Address::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其retrievePlainArray方法来验证商品数据转换逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式可以提供更可控的测试数据。
-        $goods = $this->createMock(Goods::class);
+        $account = new Account();
 
-        $bizAddressArray = ['province' => '广东省', 'city' => '深圳市'];
-        $userAddressArray = ['province' => '北京市', 'city' => '北京市'];
-        $goodsArray = ['name' => '测试商品', 'price' => 100];
+        $bizAddress = new Address();
+        $bizAddress->setName('商家名');
+        $bizAddress->setMobile('13800138000');
+        $bizAddress->setCountry('中国');
+        $bizAddress->setProvince('广东省');
+        $bizAddress->setCity('深圳市');
+        $bizAddress->setArea('南山区');
+        $bizAddress->setAddress('科技园');
 
-        $bizAddress->expects($this->once())
-            ->method('retrievePlainArray')
-            ->willReturn($bizAddressArray)
-        ;
+        $userAddress = new Address();
+        $userAddress->setName('用户名');
+        $userAddress->setMobile('13900139000');
+        $userAddress->setCountry('中国');
+        $userAddress->setProvince('北京市');
+        $userAddress->setCity('北京市');
+        $userAddress->setArea('朝阳区');
+        $userAddress->setAddress('三里屯');
 
-        $userAddress->expects($this->once())
-            ->method('retrievePlainArray')
-            ->willReturn($userAddressArray)
-        ;
+        $goods = new Goods();
+        $goods->setName('测试商品');
+        $goods->setUrl('https://example.com/goods.jpg');
 
-        $goods->expects($this->once())
-            ->method('retrievePlainArray')
-            ->willReturn($goodsArray)
-        ;
+        $bizAddressArray = $bizAddress->retrievePlainArray();
+        $userAddressArray = $userAddress->retrievePlainArray();
+        $goodsArray = $goods->retrievePlainArray();
 
         // 设置请求参数
         $this->request->setAccount($account);
@@ -103,64 +90,36 @@ final class CreateReturnOrderRequestTest extends RequestTestCase
 
     public function testGettersAndSetters(): void
     {
-        // 测试 Account
-        // Mock具体类说明: WechatMiniProgramBundle\Entity\Account是数据实体类，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证业务逻辑。
-        // 使用具体类Mock是合理的，因为Entity类主要包含数据属性和简单的getter/setter方法。
-        // 替代方案：可以考虑创建测试专用的Entity工厂类，但当前Mock方式更直观简洁。
-        $account = $this->createMock(Account::class);
+        $account = new Account();
         $this->request->setAccount($account);
         $this->assertSame($account, $this->request->getAccount());
 
-        // 测试 ShopOrderId
         $shopOrderId = 'SHOP123456';
         $this->request->setShopOrderId($shopOrderId);
         $this->assertEquals($shopOrderId, $this->request->getShopOrderId());
 
-        // 测试 BizAddress
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Address是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证setter/getter方法。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Address对象，但Mock方式更简洁且可控。
-        $bizAddress = $this->createMock(Address::class);
+        $bizAddress = new Address();
         $this->request->setBizAddress($bizAddress);
         $this->assertSame($bizAddress, $this->request->getBizAddress());
 
-        // 测试 UserAddress
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Address是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证setter/getter方法。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Address对象，但Mock方式更简洁且可控。
-        $userAddress = $this->createMock(Address::class);
+        $userAddress = new Address();
         $this->request->setUserAddress($userAddress);
         $this->assertSame($userAddress, $this->request->getUserAddress());
 
-        // 测试 OpenId
         $openId = 'o1234567890abcdef';
         $this->request->setOpenId($openId);
         $this->assertEquals($openId, $this->request->getOpenId());
 
-        // 测试 WxPayId
         $wxPayId = '2021123456789';
         $this->request->setWxPayId($wxPayId);
         $this->assertEquals($wxPayId, $this->request->getWxPayId());
 
-        // 测试 OrderPath
         $orderPath = 'pages/order/detail?id=123';
         $this->request->setOrderPath($orderPath);
         $this->assertEquals($orderPath, $this->request->getOrderPath());
 
-        // 测试 GoodsList
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证商品列表操作逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式更简洁且可控。
-        $goods1 = $this->createMock(Goods::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证商品列表操作逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式更简洁且可控。
-        $goods2 = $this->createMock(Goods::class);
+        $goods1 = new Goods();
+        $goods2 = new Goods();
         $goodsList = [$goods1, $goods2];
         $this->request->setGoodsList($goodsList);
         $this->assertEquals($goodsList, $this->request->getGoodsList());
@@ -168,16 +127,8 @@ final class CreateReturnOrderRequestTest extends RequestTestCase
 
     public function testAddGoods(): void
     {
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证addGoods方法的数组追加逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式更简洁且可控。
-        $goods1 = $this->createMock(Goods::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证addGoods方法追加第二个商品的逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式更简洁且可控。
-        $goods2 = $this->createMock(Goods::class);
+        $goods1 = new Goods();
+        $goods2 = new Goods();
 
         $this->request->setGoodsList([$goods1]);
         $this->request->addGoods($goods2);
@@ -190,25 +141,25 @@ final class CreateReturnOrderRequestTest extends RequestTestCase
 
     public function testGetRequestOptionsWithArrayGoods(): void
     {
-        // 测试处理非Goods对象的数组元素
-        // Mock具体类说明: WechatMiniProgramBundle\Entity\Account是数据实体类，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证业务逻辑。
-        // 使用具体类Mock是合理的，因为Entity类主要包含数据属性和简单的getter/setter方法。
-        // 替代方案：可以考虑创建测试专用的Entity工厂类，但当前Mock方式更直观简洁。
-        $account = $this->createMock(Account::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Address是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其retrievePlainArray方法来验证商家地址数据处理逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Address对象，但Mock方式可以提供更可控的测试数据。
-        $bizAddress = $this->createMock(Address::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Address是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其retrievePlainArray方法来验证用户地址数据处理逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Address对象，但Mock方式可以提供更可控的测试数据。
-        $userAddress = $this->createMock(Address::class);
+        $account = new Account();
 
-        $bizAddress->method('retrievePlainArray')->willReturn([]);
-        $userAddress->method('retrievePlainArray')->willReturn([]);
+        $bizAddress = new Address();
+        $bizAddress->setName('商家名');
+        $bizAddress->setMobile('13800138000');
+        $bizAddress->setCountry('中国');
+        $bizAddress->setProvince('广东省');
+        $bizAddress->setCity('深圳市');
+        $bizAddress->setArea('南山区');
+        $bizAddress->setAddress('科技园');
+
+        $userAddress = new Address();
+        $userAddress->setName('用户名');
+        $userAddress->setMobile('13900139000');
+        $userAddress->setCountry('中国');
+        $userAddress->setProvince('北京市');
+        $userAddress->setCity('北京市');
+        $userAddress->setArea('朝阳区');
+        $userAddress->setAddress('三里屯');
 
         $this->request->setAccount($account);
         $this->request->setShopOrderId('SHOP123456');

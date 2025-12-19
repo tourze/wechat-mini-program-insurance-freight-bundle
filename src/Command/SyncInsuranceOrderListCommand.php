@@ -20,7 +20,7 @@ use WechatMiniProgramInsuranceFreightBundle\Service\InsuranceFreightService;
 
 #[AsCronTask(expression: '*/15 * * * *')]
 #[AsCommand(name: self::NAME, description: '拉取保单信息到本地')]
-class SyncInsuranceOrderListCommand extends LockableCommand
+final class SyncInsuranceOrderListCommand extends LockableCommand
 {
     public const NAME = 'wechat-insurance:sync-insurance-order-list';
 

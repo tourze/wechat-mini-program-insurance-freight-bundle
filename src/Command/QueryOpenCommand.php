@@ -12,7 +12,7 @@ use WechatMiniProgramInsuranceFreightBundle\Request\QueryOpenRequest;
 use Yiisoft\Json\Json;
 
 #[AsCommand(name: self::NAME, description: '查询开通状态')]
-class QueryOpenCommand extends Command
+final class QueryOpenCommand extends Command
 {
     public const NAME = 'wechat-insurance:query-open';
 

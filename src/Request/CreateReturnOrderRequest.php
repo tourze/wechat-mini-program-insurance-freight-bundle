@@ -9,7 +9,7 @@ use WechatMiniProgramBundle\Request\WithAccountRequest;
  *
  * @see https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/industry/express/business/freight_insurance.html#%E5%88%9B%E5%BB%BA%E9%80%80%E8%B4%A7-ID
  */
-class CreateReturnOrderRequest extends WithAccountRequest
+final class CreateReturnOrderRequest extends WithAccountRequest
 {
     /**
      * @var string 商家内部系统使用的退货编号

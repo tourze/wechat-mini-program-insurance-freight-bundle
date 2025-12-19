@@ -7,7 +7,7 @@ use Tourze\Arrayable\PlainArrayInterface;
 /**
  * @implements PlainArrayInterface<string, mixed>
  */
-class Address implements PlainArrayInterface
+final class Address implements PlainArrayInterface
 {
     private string $name;
 

@@ -15,7 +15,7 @@ use WechatMiniProgramInsuranceFreightBundle\Enum\InsuranceOrderStatus;
 
 #[When(env: 'test')]
 #[When(env: 'dev')]
-class InsuranceOrderFixtures extends Fixture implements DependentFixtureInterface
+final class InsuranceOrderFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {

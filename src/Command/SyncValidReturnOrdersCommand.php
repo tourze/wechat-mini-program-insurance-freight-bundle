@@ -18,7 +18,7 @@ use WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository;
 
 #[AsCronTask(expression: '*/15 * * * *')]
 #[AsCommand(name: self::NAME, description: '同步所有有效的退货单信息到本地')]
-class SyncValidReturnOrdersCommand extends LockableCommand
+final class SyncValidReturnOrdersCommand extends LockableCommand
 {
     public const NAME = 'wechat-insurance:sync-valid-return-orders';
 

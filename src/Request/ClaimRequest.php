@@ -9,7 +9,7 @@ use WechatMiniProgramBundle\Request\WithAccountRequest;
  *
  * @see https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/industry/express/business/freight_insurance.html
  */
-class ClaimRequest extends WithAccountRequest
+final class ClaimRequest extends WithAccountRequest
 {
     /**
      * 买家openid

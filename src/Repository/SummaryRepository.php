@@ -11,7 +11,7 @@ use WechatMiniProgramInsuranceFreightBundle\Entity\Summary;
  * @extends ServiceEntityRepository<Summary>
  */
 #[AsRepository(entityClass: Summary::class)]
-class SummaryRepository extends ServiceEntityRepository
+final class SummaryRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

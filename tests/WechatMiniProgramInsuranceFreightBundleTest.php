@@ -14,10 +14,7 @@ use WechatMiniProgramInsuranceFreightBundle\WechatMiniProgramInsuranceFreightBun
  */
 #[CoversClass(WechatMiniProgramInsuranceFreightBundle::class)]
 #[RunTestsInSeparateProcesses]
-/**
- * @phpstan-ignore-next-line
- * @internal
- */
+
 final class WechatMiniProgramInsuranceFreightBundleTest extends AbstractBundleTestCase
 {
 }

@@ -8,7 +8,7 @@ use Yiisoft\Arrays\ArrayHelper;
 /**
  * @implements PlainArrayInterface<string, mixed>
  */
-class Place implements PlainArrayInterface
+final class Place implements PlainArrayInterface
 {
     /**
      * @var string 省

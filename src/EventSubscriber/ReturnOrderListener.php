@@ -20,7 +20,7 @@ use WechatMiniProgramInsuranceFreightBundle\Request\UnbindReturnOrderRequest;
 #[AsEntityListener(event: Events::postRemove, method: 'postRemove', entity: ReturnOrder::class)]
 #[Autoconfigure(public: true)]
 #[WithMonologChannel(channel: 'wechat_mini_program_insurance_freight')]
-class ReturnOrderListener
+final class ReturnOrderListener
 {
     public function __construct(
         private readonly Client $client,

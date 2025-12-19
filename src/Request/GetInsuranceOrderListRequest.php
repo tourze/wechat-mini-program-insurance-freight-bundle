@@ -12,7 +12,7 @@ use WechatMiniProgramInsuranceFreightBundle\Enum\SortDirect;
  *
  * @see https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/industry/express/business/freight_insurance.html#%E6%8B%89%E5%8F%96%E4%BF%9D%E5%8D%95%E4%BF%A1%E6%81%AF%E6%8E%A5%E5%8F%A3
  */
-class GetInsuranceOrderListRequest extends WithAccountRequest
+final class GetInsuranceOrderListRequest extends WithAccountRequest
 {
     /**
      * @var string|null 买家openid

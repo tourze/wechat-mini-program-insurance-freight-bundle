@@ -2,7 +2,7 @@
 
 namespace WechatMiniProgramInsuranceFreightBundle\Exception;
 
-class ReturnIdEmptyException extends \RuntimeException
+final class ReturnIdEmptyException extends \RuntimeException
 {
     public function __construct()
     {

@@ -20,7 +20,7 @@ use WechatMiniProgramInsuranceFreightBundle\Request\GetSummaryRequest;
 
 #[AsCronTask(expression: '30 */6 * * *')]
 #[AsCommand(name: self::NAME, description: '拉取摘要接口')]
-class GetSummaryCommand extends LockableCommand
+final class GetSummaryCommand extends LockableCommand
 {
     public const NAME = 'wechat-insurance:get-summary';
 

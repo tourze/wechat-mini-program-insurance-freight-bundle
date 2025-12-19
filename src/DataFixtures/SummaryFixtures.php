@@ -10,7 +10,7 @@ use WechatMiniProgramInsuranceFreightBundle\Entity\Summary;
 
 #[When(env: 'test')]
 #[When(env: 'dev')]
-class SummaryFixtures extends Fixture
+final class SummaryFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {

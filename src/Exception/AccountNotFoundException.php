@@ -2,7 +2,7 @@
 
 namespace WechatMiniProgramInsuranceFreightBundle\Exception;
 
-class AccountNotFoundException extends \RuntimeException
+final class AccountNotFoundException extends \RuntimeException
 {
     public function __construct()
     {

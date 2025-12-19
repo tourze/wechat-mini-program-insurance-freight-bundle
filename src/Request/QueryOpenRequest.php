@@ -9,7 +9,7 @@ use WechatMiniProgramBundle\Request\WithAccountRequest;
  *
  * @see https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/industry/express/business/freight_insurance.html
  */
-class QueryOpenRequest extends WithAccountRequest
+final class QueryOpenRequest extends WithAccountRequest
 {
     public function getRequestPath(): string
     {

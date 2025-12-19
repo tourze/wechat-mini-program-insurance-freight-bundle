@@ -20,7 +20,7 @@ use Yiisoft\Arrays\ArrayHelper;
  */
 #[Autoconfigure(public: true)]
 #[WithMonologChannel(channel: 'wechat_mini_program_insurance_freight')]
-class WechatServerCallbackSubscriber
+final class WechatServerCallbackSubscriber
 {
     public function __construct(
         private readonly InsuranceOrderRepository $orderRepository,

@@ -14,7 +14,7 @@ use WechatMiniProgramInsuranceFreightBundle\Repository\ReturnOrderRepository;
 use WechatMiniProgramInsuranceFreightBundle\Service\InsuranceFreightService;
 
 #[AsCommand(name: self::NAME, description: '同步单个退货信息到本地')]
-class SyncSingleReturnOrderCommand extends LockableCommand
+final class SyncSingleReturnOrderCommand extends LockableCommand
 {
     public const NAME = 'wechat-insurance:sync-single-return-order';
 

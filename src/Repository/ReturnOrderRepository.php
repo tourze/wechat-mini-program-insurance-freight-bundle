@@ -11,7 +11,7 @@ use WechatMiniProgramInsuranceFreightBundle\Entity\ReturnOrder;
  * @extends ServiceEntityRepository<ReturnOrder>
  */
 #[AsRepository(entityClass: ReturnOrder::class)]
-class ReturnOrderRepository extends ServiceEntityRepository
+final class ReturnOrderRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

@@ -58,16 +58,14 @@ final class WechatServerCallbackSubscriberTest extends AbstractEventSubscriberTe
     {
         $subscriber = self::getService(WechatServerCallbackSubscriber::class);
 
-        $event = $this->createMock(ServerMessageRequestEvent::class);
-        $event->expects($this->once())
-            ->method('getMessage')
-            ->willReturn(['Event' => 'other_event'])
-        ;
+        $event = new ServerMessageRequestEvent();
+        $event->setMessage(['Event' => 'other_event']);
 
-        // 应该直接返回，不进行任何处理
+        // 应该直接返回,不进行任何处理
         $subscriber->onServerMessageRequest($event);
 
-        // 没有异常抛出表示测试通过
+        // 验证事件消息未被修改
+        $this->assertSame(['Event' => 'other_event'], $event->getMessage());
     }
 
     /**
@@ -77,15 +75,14 @@ final class WechatServerCallbackSubscriberTest extends AbstractEventSubscriberTe
     {
         $subscriber = self::getService(WechatServerCallbackSubscriber::class);
 
-        $event = $this->createMock(ServerMessageRequestEvent::class);
-        $event->expects($this->once())
-            ->method('getMessage')
-            ->willReturn(['Event' => 'wxainsurance_claim_result'])
-        ;
+        $event = new ServerMessageRequestEvent();
+        $message = ['Event' => 'wxainsurance_claim_result'];
+        $event->setMessage($message);
 
         // 应该因为缺少 upload_event 而直接返回
         $subscriber->onServerMessageRequest($event);
 
-        // 没有异常抛出表示测试通过
+        // 验证事件消息未被修改
+        $this->assertSame($message, $event->getMessage());
     }
 }

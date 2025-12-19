@@ -4,7 +4,7 @@ namespace WechatMiniProgramInsuranceFreightBundle\DependencyInjection;
 
 use Tourze\SymfonyDependencyServiceLoader\AutoExtension;
 
-class WechatMiniProgramInsuranceFreightExtension extends AutoExtension
+final class WechatMiniProgramInsuranceFreightExtension extends AutoExtension
 {
     protected function getConfigDir(): string
     {

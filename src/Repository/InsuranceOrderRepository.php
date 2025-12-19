@@ -11,7 +11,7 @@ use WechatMiniProgramInsuranceFreightBundle\Entity\InsuranceOrder;
  * @extends ServiceEntityRepository<InsuranceOrder>
  */
 #[AsRepository(entityClass: InsuranceOrder::class)]
-class InsuranceOrderRepository extends ServiceEntityRepository
+final class InsuranceOrderRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

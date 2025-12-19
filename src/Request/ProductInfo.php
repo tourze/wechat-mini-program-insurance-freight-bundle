@@ -7,7 +7,7 @@ use Tourze\Arrayable\PlainArrayInterface;
 /**
  * @implements PlainArrayInterface<string, mixed>
  */
-class ProductInfo implements PlainArrayInterface
+final class ProductInfo implements PlainArrayInterface
 {
     /**
      * @var string 投保订单在商家小程序的path

@@ -8,7 +8,7 @@ use Tourze\Arrayable\PlainArrayInterface;
  * 投保订单商品
  * @implements PlainArrayInterface<string, mixed>
  */
-class Goods implements PlainArrayInterface
+final class Goods implements PlainArrayInterface
 {
     /**
      * @var string 投保商品名称

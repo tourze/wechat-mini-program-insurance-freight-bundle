@@ -2,7 +2,7 @@
 
 namespace WechatMiniProgramInsuranceFreightBundle\Exception;
 
-class ReturnOrderNotFoundException extends \RuntimeException
+final class ReturnOrderNotFoundException extends \RuntimeException
 {
     public function __construct(string $shopOrderId)
     {

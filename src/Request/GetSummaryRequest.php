@@ -10,7 +10,7 @@ use WechatMiniProgramBundle\Request\WithAccountRequest;
  *
  * @see https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/industry/express/business/freight_insurance.html
  */
-class GetSummaryRequest extends WithAccountRequest
+final class GetSummaryRequest extends WithAccountRequest
 {
     /**
      * 查询开始时间

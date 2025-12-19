@@ -30,16 +30,10 @@ final class GetSummaryRequestTest extends RequestTestCase
 
     public function testGetRequestOptionsWithValidData(): void
     {
-        // 准备测试数据
-        // Mock具体类说明: WechatMiniProgramBundle\Entity\Account是数据实体类，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证业务逻辑。
-        // 使用具体类Mock是合理的，因为Entity类主要包含数据属性和简单的getter/setter方法。
-        // 替代方案：可以考虑创建测试专用的Entity工厂类，但当前Mock方式更直观简洁。
-        $account = $this->createMock(Account::class);
+        $account = new Account();
         $beginTime = CarbonImmutable::parse('2023-01-01 00:00:00');
         $endTime = CarbonImmutable::parse('2023-01-31 23:59:59');
 
-        // 设置请求参数
         $this->request->setAccount($account);
         $this->request->setBeginTime($beginTime);
         $this->request->setEndTime($endTime);
@@ -63,16 +57,10 @@ final class GetSummaryRequestTest extends RequestTestCase
 
     public function testGettersAndSetters(): void
     {
-        // 测试 Account
-        // Mock具体类说明: WechatMiniProgramBundle\Entity\Account是数据实体类，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证业务逻辑。
-        // 使用具体类Mock是合理的，因为Entity类主要包含数据属性和简单的getter/setter方法。
-        // 替代方案：可以考虑创建测试专用的Entity工厂类，但当前Mock方式更直观简洁。
-        $account = $this->createMock(Account::class);
+        $account = new Account();
         $this->request->setAccount($account);
         $this->assertSame($account, $this->request->getAccount());
 
-        // 测试 BeginTime
         $beginTime = CarbonImmutable::parse('2023-01-01 00:00:00');
         $this->request->setBeginTime($beginTime);
         $this->assertSame($beginTime, $this->request->getBeginTime());

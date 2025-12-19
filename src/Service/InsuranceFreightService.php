@@ -24,7 +24,7 @@ use WechatMiniProgramInsuranceFreightBundle\Request\GetReturnOrderRequest;
  */
 #[Autoconfigure(public: true)]
 #[WithMonologChannel(channel: 'wechat_mini_program_insurance_freight')]
-class InsuranceFreightService
+final class InsuranceFreightService
 {
     public function __construct(
         private readonly Client $client,

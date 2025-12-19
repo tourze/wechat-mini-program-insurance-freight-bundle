@@ -16,7 +16,7 @@ use WechatMiniProgramInsuranceFreightBundle\Enum\ReturnStatus;
 
 #[When(env: 'test')]
 #[When(env: 'dev')]
-class ReturnOrderFixtures extends Fixture implements DependentFixtureInterface
+final class ReturnOrderFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {

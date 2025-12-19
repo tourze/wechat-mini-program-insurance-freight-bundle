@@ -24,22 +24,12 @@ final class ProductInfoTest extends TestCase
 
     public function testGettersAndSetters(): void
     {
-        // 测试 OrderPath
         $orderPath = 'pages/order/detail?id=123';
         $this->productInfo->setOrderPath($orderPath);
         $this->assertEquals($orderPath, $this->productInfo->getOrderPath());
 
-        // 测试 GoodsList
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证数组操作逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式可以提供更可控的测试环境。
-        $goods1 = $this->createMock(Goods::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证数组操作逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式可以提供更可控的测试环境。
-        $goods2 = $this->createMock(Goods::class);
+        $goods1 = new Goods();
+        $goods2 = new Goods();
         $goodsList = [$goods1, $goods2];
 
         $this->productInfo->setGoodsList($goodsList);
@@ -48,21 +38,9 @@ final class ProductInfoTest extends TestCase
 
     public function testAddGoods(): void
     {
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证addGoods方法的数组追加逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式可以提供更可控的测试环境。
-        $goods1 = $this->createMock(Goods::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证第二个商品的处理逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式可以提供更可控的测试环境。
-        $goods2 = $this->createMock(Goods::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其行为来验证addGoods方法追加第三个商品的逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式可以提供更可控的测试环境。
-        $goods3 = $this->createMock(Goods::class);
+        $goods1 = new Goods();
+        $goods2 = new Goods();
+        $goods3 = new Goods();
 
         $this->productInfo->setGoodsList([$goods1, $goods2]);
         $this->productInfo->addGoods($goods3);
@@ -76,29 +54,13 @@ final class ProductInfoTest extends TestCase
 
     public function testRetrievePlainArray(): void
     {
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其retrievePlainArray方法来验证数组转换逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式可以提供更可控的测试数据。
-        $goods1 = $this->createMock(Goods::class);
-        // Mock具体类说明: WechatMiniProgramInsuranceFreightBundle\Request\Goods是数据传输对象(DTO)，
-        // 没有对应的接口定义，测试中需要模拟其retrievePlainArray方法来验证数组转换逻辑。
-        // 使用具体类Mock是合理的，因为DTO类主要用于数据传输，本身不包含复杂业务逻辑。
-        // 替代方案：可以创建真实的Goods对象，但Mock方式可以提供更可控的测试数据。
-        $goods2 = $this->createMock(Goods::class);
+        $goods1 = new Goods();
+        $goods1->setName('商品1');
+        $goods1->setUrl('https://example.com/1.jpg');
 
-        $goods1Array = ['name' => '商品1', 'url' => 'https://example.com/1.jpg'];
-        $goods2Array = ['name' => '商品2', 'url' => 'https://example.com/2.jpg'];
-
-        $goods1->expects($this->once())
-            ->method('retrievePlainArray')
-            ->willReturn($goods1Array)
-        ;
-
-        $goods2->expects($this->once())
-            ->method('retrievePlainArray')
-            ->willReturn($goods2Array)
-        ;
+        $goods2 = new Goods();
+        $goods2->setName('商品2');
+        $goods2->setUrl('https://example.com/2.jpg');
 
         $this->productInfo->setOrderPath('pages/order/detail?id=123');
         $this->productInfo->setGoodsList([$goods1, $goods2]);
@@ -108,7 +70,10 @@ final class ProductInfoTest extends TestCase
         $this->assertArrayHasKey('order_path', $array);
         $this->assertArrayHasKey('goods_list', $array);
         $this->assertEquals('pages/order/detail?id=123', $array['order_path']);
-        $this->assertEquals([$goods1Array, $goods2Array], $array['goods_list']);
+        $this->assertEquals([
+            ['name' => '商品1', 'url' => 'https://example.com/1.jpg'],
+            ['name' => '商品2', 'url' => 'https://example.com/2.jpg'],
+        ], $array['goods_list']);
     }
 
     public function testRetrievePlainArrayWithEmptyGoodsList(): void

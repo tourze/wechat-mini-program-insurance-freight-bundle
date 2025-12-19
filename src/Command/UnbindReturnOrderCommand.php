@@ -17,7 +17,7 @@ use WechatMiniProgramInsuranceFreightBundle\Request\UnbindReturnOrderRequest;
 use Yiisoft\Json\Json;
 
 #[AsCommand(name: self::NAME, description: '解绑单个退货信息')]
-class UnbindReturnOrderCommand extends LockableCommand
+final class UnbindReturnOrderCommand extends LockableCommand
 {
     public const NAME = 'wechat-insurance:unbind-return-order';
 

@@ -9,7 +9,7 @@ use WechatMiniProgramBundle\Request\WithAccountRequest;
  *
  * @see https://developers.weixin.qq.com/miniprogram/dev/platform-capabilities/industry/express/business/freight_insurance.html#%E6%8A%95%E4%BF%9D%E6%8E%A5%E5%8F%A3-%E5%8F%91%E8%B4%A7%E6%97%B6%E6%8A%95%E4%BF%9D
  */
-class CreateInsuranceOrderRequest extends WithAccountRequest
+final class CreateInsuranceOrderRequest extends WithAccountRequest
 {
     /**
      * @var string 必须和理赔openid一致

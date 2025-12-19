@@ -22,7 +22,7 @@ use WechatMiniProgramInsuranceFreightBundle\Request\ProductInfo;
 #[AsEntityListener(event: Events::prePersist, method: 'prePersist', entity: InsuranceOrder::class)]
 #[Autoconfigure(public: true)]
 #[WithMonologChannel(channel: 'wechat_mini_program_insurance_freight')]
-readonly class InsuranceOrderListener
+readonly final class InsuranceOrderListener
 {
     public function __construct(
         private Client $client,
